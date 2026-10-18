@@ -11,7 +11,6 @@
       "from": "builder",
       "created": "2026-10-18T09:10:00Z",
       "title": "Open the beta to testers this Friday?",
-      "short": "Beta date",
       "body": [
         "Every fix has passed review, and the notes for testers are written."
       ],
@@ -34,6 +33,29 @@
   {
     "op": "set",
     "collection": "items",
+    "doc_id": "q16",
+    "data": {
+      "kind": "decision",
+      "status": "open",
+      "urgent": true,
+      "num": 16,
+      "priority": 1,
+      "from": "tester",
+      "created": "2026-10-18T09:40:00Z",
+      "title": "Stop build 1.1 for testers? It crashes when a saved list is opened.",
+      "body": [
+        "Three testers hit it this morning. Build 1.2 has the fix and waits for your upload (№ 13)."
+      ],
+      "recommendation": "Stop it now. Testers keep their lists, and they get 1.2 as soon as it's uploaded.",
+      "choices": [
+        "Stop it now",
+        "Leave it running"
+      ]
+    }
+  },
+  {
+    "op": "set",
+    "collection": "items",
     "doc_id": "t-upload",
     "data": {
       "kind": "task",
@@ -43,7 +65,6 @@
       "from": "builder",
       "created": "2026-10-18T09:12:00Z",
       "title": "Upload build 1.2 to the beta",
-      "short": "Upload build",
       "body": [
         "Only you can do this: it needs your developer account."
       ],
@@ -82,7 +103,6 @@
       "from": "reviewer",
       "created": "2026-10-18T08:40:00Z",
       "title": "Keep the free plan at three saved lists?",
-      "short": "Free plan",
       "recommendation": "Keep three. Raising it later is easy; lowering it isn't.",
       "choices": [
         "Keep three",
@@ -108,7 +128,6 @@
       "from": "feedback",
       "created": "2026-10-17T16:00:00Z",
       "title": "Charge for sync between devices, after version 2?",
-      "short": "Paid sync",
       "body": [
         "Two testers asked for it. Nothing waits on this until version 2."
       ],

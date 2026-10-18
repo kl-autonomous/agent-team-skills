@@ -1,11 +1,11 @@
 ---
 name: owner-desk
-description: Give the human owner a live board, a Claude artifact with its own small database, for everything only they can decide or do. Each decision or task gets its own tab, with a recommended answer, answer buttons, steps to tick, text to copy and files; the owner answers from their phone whenever they like, the answer wakes the agent through a comment, and the agent acts and archives the item. Use this whenever an agent has several open questions or owner-only tasks (approvals, uploads, sign-ins, purchases, account changes), when the owner says questions get lost or buried in chat, when they ask for a dashboard, inbox, to-do board, decision board or "desk" for what's waiting on them, or when a chief-of-staff or manager session needs a home for its "waiting for the owner" list.
+description: Give the human owner a live board, a Claude artifact with its own small database, for everything only they can decide or do. Each decision or task gets its own card, with a recommended answer, answer buttons, steps to tick, text to copy and files; the owner answers from their phone whenever they like, the answer wakes the agent through a comment, and the agent acts and archives the item. Use this whenever an agent has several open questions or owner-only tasks (approvals, uploads, sign-ins, purchases, account changes), when the owner says questions get lost or buried in chat, when they ask for a dashboard, inbox, to-do board, decision board or "desk" for what's waiting on them, or when a chief-of-staff or manager session needs a home for its "waiting for the owner" list.
 ---
 
 # Owner desk
 
-Questions in chat get buried, and the owner has to answer when the agent asks, not when they have time. The desk moves them out of the chat into a board: a Needs you tab with every open item (each also gets a tab of its own), a Decided tab for answered ones, a Later tab for what can wait, and an Archive for what's done. On a phone or iPad, the owner swipes sideways to move between tabs. The owner answers there; you read the answers, act, and archive.
+Questions in chat get buried, and the owner has to answer when the agent asks, not when they have time. The desk moves them out of the chat into a board: a Needs you tab with every open item, a yellow Urgent tab only when something can't wait, a Decided tab for answered ones, a Later tab for what can wait, and an Archive for what's done. On a phone or iPad, the owner swipes sideways to move between tabs. The owner answers there; you read the answers, act, and archive.
 
 ## What this needs
 
@@ -72,9 +72,9 @@ Each item is one document in the collection `items`. Its document id is its hand
 | `kind` | you | `"decision"` or `"task"` |
 | `status` | both | `"open"`; the page sets `"answered"`; you set `"archived"` |
 | `later` | you | `true` parks it on the Later tab |
+| `urgent` | you | `true` puts it on a yellow Urgent tab and at the top of the Overview. Only for what can't wait: a deadline today, or something broken for users |
 | `num` | you | a running number, the same one you use in chat; never reused |
 | `title` | you | the question itself, answerable with the choices, or the task as an action |
-| `short` | you | the tab's label, two or three words |
 | `body`, `bullets` | you | short paragraphs and points: why it matters, what it affects |
 | `recommendation` | you | your answer first, then the reason, in one or two sentences |
 | `choices` | you | two to four answers; defaults to Yes / No |
@@ -89,12 +89,12 @@ Each item is one document in the collection `items`. Its document id is its hand
 | `thread` | page | the comment thread the page uses for this item; leave it alone |
 | `outcome`, `archived` | you | what happened, in one line; when you archived it |
 
-`assets/example-items.json` holds six made-up items, as `ArtifactData` `batch` writes. Use them to try a board, never on the owner's real one.
+`assets/example-items.json` holds seven made-up items, as `ArtifactData` `batch` writes. Use them to try a board, never on the owner's real one.
 
 ## Post items
 
 - Add new items with `ArtifactData`. Use `set` for a new document, and `batch` for more than two. Never republish the page to change items.
-- Then say in chat what you added, with a link to each item's tab: `<board url>#<doc id>`.
+- Then say in chat what you added, with a link to each item: `<board url>#<doc id>` opens its tab and scrolls to it.
 - If you also work from a chat list of open questions (as the chief of staff does), keep both the same: the same number, the same words.
 - Write each item so it stands on its own: what is being decided, what changes either way, and what you recommend.
 - A task lists the exact steps, the text to paste in `copies`, and the guide in `links`.

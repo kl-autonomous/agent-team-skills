@@ -4,13 +4,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a desk. A sticky rail of tabs (the groups, plus one per item that needs you) above one open slip at a time. Swipe sideways to change tabs. */
+/* Layout: a desk. A sticky rail of group tabs (Urgent only when something is) above the open cards. Swipe sideways to change tabs. */
 :root{
   --bg:#F4F3F1; --surface:#FFFFFF; --ink:#1B1C20; --muted:#63646C; --line:#E0DED9;
   --accent:#B8324A; --accent-soft:#F7E2E6; --on-accent:#FFFFFF;
   --wait:#8A600F; --wait-soft:#F5EAD3;
   --ok:#2A6F52; --ok-soft:#DDEFE5;
   --later:#56627C; --later-soft:#E5E9F1;
+  --urgent:#6E5200; --urgent-soft:#FFF1B0; --urgent-line:#E2B714;
   --code-bg:#F0EEEA;
   --font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","PingFang SC","Noto Sans","Noto Sans CJK SC",system-ui,sans-serif;
   --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
@@ -22,6 +23,7 @@
   --wait:#E3B04F; --wait-soft:#33290F;
   --ok:#62C497; --ok-soft:#16301F;
   --later:#9AA8C6; --later-soft:#232A39;
+  --urgent:#FFD84D; --urgent-soft:#382E06; --urgent-line:#B8950C;
   --code-bg:#25262C; color-scheme:dark;
 }}
 :root[data-theme="dark"]{
@@ -30,6 +32,7 @@
   --wait:#E3B04F; --wait-soft:#33290F;
   --ok:#62C497; --ok-soft:#16301F;
   --later:#9AA8C6; --later-soft:#232A39;
+  --urgent:#FFD84D; --urgent-soft:#382E06; --urgent-line:#B8950C;
   --code-bg:#25262C; color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -51,6 +54,18 @@ h1{font-size:26px;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
 .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;background:var(--muted)}
 .dot.needs{background:var(--accent)} .dot.wait{background:var(--wait)} .dot.ok{background:var(--ok)} .dot.later{background:var(--later)}
 .count{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+.tab.urgent{background:var(--urgent-soft);border-color:var(--urgent-line);color:var(--urgent);font-weight:700}
+.tab.urgent .count{color:var(--urgent)}
+.tab.urgent[aria-selected="true"]{border-color:var(--urgent);box-shadow:inset 0 0 0 1px var(--urgent)}
+.dot.urgent{background:var(--urgent-line)}
+.pill.urgent{background:var(--urgent-soft);color:var(--urgent);font-weight:700} .pill.urgent .dot{display:none}
+.slip.is-urgent{border-color:var(--urgent-line);box-shadow:inset 4px 0 0 var(--urgent-line)}
+.urgent-box{background:var(--urgent-soft);border:1px solid var(--urgent-line);border-radius:var(--r);padding:14px 18px;color:var(--urgent)}
+.urgent-box .sec-label{color:var(--urgent);font-weight:500}
+.urgent-box .ov-row{border-top-color:color-mix(in srgb,var(--urgent-line) 45%,transparent)}
+.urgent-box .ov-row .t{color:var(--ink)}
+/* A card opened from a link or from the Overview scrolls to just below the sticky rail. */
+article.slip,details.arch{scroll-margin-top:72px}
 
 main{padding-top:18px;display:flex;flex-direction:column;gap:16px}
 .slip{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 20px 18px;display:flex;flex-direction:column;gap:14px;min-width:0}
@@ -112,6 +127,8 @@ ol.steps li.done label{color:var(--muted);text-decoration:line-through;text-deco
 .reach{font-size:12.5px;color:var(--muted)}
 .swipe-tip{display:none;margin-top:-8px}
 @media (hover: none) and (pointer: coarse){ .swipe-tip{display:block} }
+/* The slide-in moves the page sideways for a moment; clip it so the page never scrolls sideways (clip keeps the sticky rail working). */
+.wrap{overflow-x:clip}
 .divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin-top:6px}
 .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
 .divider span{flex:0 1 auto;text-align:center}
@@ -152,24 +169,28 @@ details.arch[open] summary{margin-bottom:10px}
   // Shown only when the page is opened outside Claude (a plain browser, a preview).
   const DEMO = [
     { id: "q12", kind: "decision", status: "open", num: 12, priority: 1, from: "builder", created: "2026-10-18T09:10:00Z",
-      title: "Open the beta to testers this Friday?", short: "Beta date",
+      title: "Open the beta to testers this Friday?",
       body: ["Every fix has passed review, and the notes for testers are written."],
       recommendation: "Yes. Waiting a week adds nothing we know of.", choices: ["Yes", "Next week"],
       asks: [{ q: "Will testers see my own data?", at: "2026-10-18T09:30:00Z", via: "comment",
                a: "No. The beta starts empty; your data stays on your phone.", aAt: "2026-10-18T09:32:00Z" }] },
+    { id: "q16", kind: "decision", status: "open", urgent: true, num: 16, priority: 1, from: "tester", created: "2026-10-18T09:40:00Z",
+      title: "Stop build 1.1 for testers? It crashes when a saved list is opened.",
+      body: ["Three testers hit it this morning. Build 1.2 has the fix and waits for your upload (№ 13)."],
+      recommendation: "Stop it now. Testers keep their lists, and they get 1.2 as soon as it's uploaded.", choices: ["Stop it now", "Leave it running"] },
     { id: "t-upload", kind: "task", status: "open", num: 13, priority: 2, from: "builder", created: "2026-10-18T09:12:00Z",
-      title: "Upload build 1.2 to the beta", short: "Upload build",
+      title: "Upload build 1.2 to the beta",
       body: ["Only you can do this: it needs your developer account."],
       steps: ["Open the developer site and sign in.", "Pick build 1.2 and add it to the testers' group.", "Paste the notes below into “What to test”."],
       stepsDone: [0],
       copies: [{ label: "What to test", text: "Search now finds recipes by ingredient. Try a search with two ingredients, and tell us if anything is missing." }],
       links: [{ label: "Upload guide (PDF)", url: "#", note: "two pages, with pictures" }] },
     { id: "q14", kind: "decision", status: "answered", num: 14, priority: 3, from: "reviewer", created: "2026-10-18T08:40:00Z",
-      title: "Keep the free plan at three saved lists?", short: "Free plan",
+      title: "Keep the free plan at three saved lists?",
       recommendation: "Keep three. Raising it later is easy; lowering it isn't.", choices: ["Keep three", "Raise to five", "No limit"],
       answer: { choice: "Keep three", note: "", at: "2026-10-18T09:05:00Z" } },
     { id: "q15", kind: "decision", status: "open", later: true, num: 15, from: "feedback", created: "2026-10-17T16:00:00Z",
-      title: "Charge for sync between devices, after version 2?", short: "Paid sync",
+      title: "Charge for sync between devices, after version 2?",
       body: ["Two testers asked for it. Nothing waits on this until version 2."],
       recommendation: "Decide after the beta, with the testers' numbers.", choices: ["Yes", "No", "Decide later"] },
     { id: "q11", kind: "decision", status: "archived", num: 11, from: "builder", created: "2026-10-17T10:00:00Z",
@@ -204,6 +225,7 @@ details.arch[open] summary{margin-bottom:10px}
       ? { cls: "wait", text: `Done by you · ${AGENT} checking`, short: "Done by you" }
       : { cls: "wait", text: `Answered · ${AGENT} acting`, short: "Answered" };
     if (it.later) return { cls: "later", text: "For later", short: "For later" };
+    if (it.urgent) return { cls: "urgent", text: "⚠️ Urgent", short: "⚠️ Urgent" };
     return { cls: "needs", text: "Needs you", short: "Needs you" };
   }
   function groups(){
@@ -211,16 +233,17 @@ details.arch[open] summary{margin-bottom:10px}
       const ra = a.status === "answered" ? 1 : 0, rb = b.status === "answered" ? 1 : 0;
       return ra - rb || (a.priority || 5) - (b.priority || 5) || byTime(a, b);
     });
-    const needs = active.filter(it => it.status !== "answered");
+    const open = active.filter(it => it.status !== "answered");
+    const urgent = open.filter(it => it.urgent), needs = open.filter(it => !it.urgent);
     const decided = active.filter(it => it.status === "answered");
     const later = S.items.filter(isLater).sort(byTime);
     const archived = S.items.filter(isArchived).sort((a, b) => String(b.archived || "").localeCompare(String(a.archived || "")));
-    return { active, needs, decided, later, archived };
+    return { active, urgent, needs, decided, later, archived };
   }
-  const GROUP_TABS = ["overview", "needs", "decided", "later", "archive"];
-  // The group tab an item lives under, for an item that has no tab of its own.
-  const groupOf = (it) => isArchived(it) ? "archive" : it.later ? "later" : it.status === "answered" ? "decided" : "needs";
-  const label = (it) => (it.num ? it.num + " · " : "") + (it.short || it.title);
+  const GROUP_TABS = ["overview", "urgent", "needs", "decided", "later", "archive"];
+  // The tab an item's card lives on; a link to an item (#<id>) opens that tab and scrolls to the card.
+  const groupOf = (it) => !it ? "overview" : isArchived(it) ? "archive" : it.later ? "later" : it.status === "answered" ? "decided" : it.urgent ? "urgent" : "needs";
+  const reduceMotion = () => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){ return false; } };
   const openAsks = (it) => (it.asks || []).filter(a => !a.a).length;
 
   function renderTabs(g){
@@ -228,15 +251,24 @@ details.arch[open] summary{margin-bottom:10px}
     const tab = (id, text, dot, extra) => `<button class="tab" role="tab" aria-selected="${S.tab === id}" data-tab="${esc(id)}">${dot ? `<span class="dot ${dot}"></span>` : ""}<span class="t">${esc(text)}</span>${extra || ""}</button>`;
     const count = (n) => `<span class="count">${n}</span>`;
     t.push(tab("overview", "Overview", "", ""));
+    t.push(`<span class="tab-sep" aria-hidden="true"></span>`);
+    if (g.urgent.length) t.push(`<button class="tab urgent" role="tab" aria-selected="${S.tab === "urgent"}" data-tab="urgent"><span aria-hidden="true">⚠️</span><span class="t">Urgent</span>${count(g.urgent.length)}</button>`);
     t.push(tab("needs", "Needs you", "needs", count(g.needs.length)));
-    g.needs.forEach(it => t.push(tab(it.id, label(it), statusOf(it).cls)));
     t.push(`<span class="tab-sep" aria-hidden="true"></span>`);
     t.push(tab("decided", "Decided", "wait", count(g.decided.length)));
     t.push(tab("later", "Later", "later", count(g.later.length)));
     t.push(tab("archive", "Archive", "ok", count(g.archived.length)));
-    $("#tabs").innerHTML = t.join("");
-    const sel = $("#tabs .tab[aria-selected='true']");
-    if (sel && sel.scrollIntoView) sel.scrollIntoView({ block: "nearest", inline: "nearest" });
+    const rail = $("#tabs"), kept = rail.scrollLeft;
+    rail.innerHTML = t.join("");
+    // Keep the open tab as near the middle of the rail as it can go; glide there when the tab changes.
+    if (S.railTab !== S.tab){ const glide = S.railTab != null; S.railTab = S.tab; if (glide) setTimeout(() => centerTab(true), 0); else centerTab(false); }
+    else rail.scrollLeft = kept;
+  }
+  function centerTab(glide){
+    const rail = $("#tabs"), sel = rail.querySelector(".tab[aria-selected='true']");
+    if (!sel) return;
+    const left = rail.scrollLeft + sel.getBoundingClientRect().left - rail.getBoundingClientRect().left - (rail.clientWidth - sel.offsetWidth) / 2;
+    rail.scrollTo({ left: Math.max(0, left), behavior: glide && !reduceMotion() ? "smooth" : "auto" });
   }
 
   function bodyHtml(it){
@@ -300,7 +332,7 @@ details.arch[open] summary{margin-bottom:10px}
   function slip(it){
     const st = statusOf(it);
     const readOnly = isArchived(it);
-    return `<article class="slip ${it.status === "answered" ? "answered" : ""}" data-item="${esc(it.id)}" aria-labelledby="h-${esc(it.id)}">
+    return `<article class="slip ${it.status === "answered" ? "answered" : ""} ${st.cls === "urgent" ? "is-urgent" : ""}" data-item="${esc(it.id)}" aria-labelledby="h-${esc(it.id)}">
       <div class="meta">${it.num ? `<span class="num">№ ${esc(it.num)}</span>` : ""}<span class="kind">${it.kind === "task" ? "Task for you" : "Decision"}</span><span class="pill ${st.cls}"><span class="dot ${st.cls}"></span>${esc(st.text)}</span><span>${it.from ? "from " + esc(it.from) + " · " : ""}${esc(fmt(it.created))}</span></div>
       <h2 id="h-${esc(it.id)}">${esc(it.title)}</h2>
       ${bodyHtml(it)}
@@ -319,12 +351,13 @@ details.arch[open] summary{margin-bottom:10px}
     const und = g.needs, dec = g.decided;
     const tile = (id, cls, n, text) => `<button class="tile ${cls}" data-tab="${id}"><div class="n">${n}</div><div class="l">${text}</div></button>`;
     const tiles = `<div class="tiles">${tile("needs", "needs", und.length, "Need you")}${tile("decided", "wait", dec.length, "With " + esc(AGENT))}${tile("later", "", g.later.length, "For later")}${tile("archive", "", g.archived.length, "Archived")}</div>`;
-    const row = (it) => { const st = statusOf(it); const q = openAsks(it); return `<button class="ov-row" data-tab="${esc(it.id)}"><span class="dot ${st.cls}"></span><span class="t">${it.num ? `<span class="num">№ ${esc(it.num)}</span> · ` : ""}${esc(it.title)}</span>${q ? `<span class="qchip">question asked</span>` : `<span class="pill ${st.cls}">${esc(st.short)}</span>`}</button>`; };
-    const list = (und.length ? `<div class="slip overview"><span class="sec-label">Needs you</span><div class="list">${und.map(row).join("")}</div></div>` : `<div class="calm">Nothing needs you.</div>`)
+    const row = (it) => { const st = statusOf(it); const q = openAsks(it); return `<button class="ov-row" data-act="open" data-id="${esc(it.id)}"><span class="dot ${st.cls}"></span><span class="t">${it.num ? `<span class="num">№ ${esc(it.num)}</span> · ` : ""}${esc(it.title)}</span>${q ? `<span class="qchip">question asked</span>` : `<span class="pill ${st.cls}">${esc(st.short)}</span>`}</button>`; };
+    const urgentBox = g.urgent.length ? `<div class="urgent-box overview"><span class="sec-label">⚠️ Urgent · do these first</span><div class="list">${g.urgent.map(row).join("")}</div></div>` : "";
+    const list = (und.length ? `<div class="slip overview"><span class="sec-label">Needs you</span><div class="list">${und.map(row).join("")}</div></div>` : g.urgent.length ? "" : `<div class="calm">Nothing needs you.</div>`)
       + (dec.length ? `<div class="divider"><span>Decided · ${esc(AGENT)} is acting on these</span></div><div class="slip overview decided"><div class="list">${dec.map(row).join("")}</div></div>` : "");
     const asked = g.later.filter(i => openAsks(i));
     const askedList = asked.length ? `<div class="slip overview"><span class="sec-label">Questions you asked on later items</span><div class="list">${asked.map(row).join("")}</div></div>` : "";
-    return tiles + list + askedList + `<p class="reach">${esc(reachHint())}</p><p class="reach swipe-tip">Swipe left or right to move between tabs.</p>`;
+    return urgentBox + tiles + list + askedList + `<p class="reach">${esc(reachHint())}</p><p class="reach swipe-tip">Swipe left or right to move between tabs.</p>`;
   }
   function render(){
     const main = $("#main");
@@ -337,13 +370,16 @@ details.arch[open] summary{margin-bottom:10px}
     const g = groups();
     const ids = new Set(S.items.map(i => i.id));
     if (!S.tab || (!GROUP_TABS.includes(S.tab) && !ids.has(S.tab))) S.tab = "overview";
+    if (!GROUP_TABS.includes(S.tab)){ S.focus = S.tab; S.tab = groupOf(find(S.tab)); store("desk.tab", S.tab); try { history.replaceState(null, "", "#" + S.tab); } catch(e){} }
+    if (S.tab === "urgent" && !g.urgent.length) S.tab = "needs";
     renderTabs(g);
     let html = "";
     if (S.tab === "overview") html = overview(g);
+    else if (S.tab === "urgent") html = `<p class="note" style="margin:0">⚠️ These can't wait. Each one moves to Decided when you answer it.</p>` + g.urgent.map(slip).join("");
     else if (S.tab === "needs"){
       html = g.needs.length
-        ? `<p class="note" style="margin:0">Everything waiting for you, one after another. Answer in any order; each one moves to Decided when you do.</p>` + g.needs.map(slip).join("")
-        : `<div class="calm">Nothing needs you.</div>`;
+        ? `<p class="note" style="margin:0">Everything ${g.urgent.length ? "else " : ""}waiting for you, one after another. Answer in any order; each one moves to Decided when you do.</p>` + g.needs.map(slip).join("")
+        : `<div class="calm">Nothing ${g.urgent.length ? "else " : ""}needs you.</div>`;
     }
     else if (S.tab === "decided"){
       html = g.decided.length
@@ -359,8 +395,18 @@ details.arch[open] summary{margin-bottom:10px}
         : `<div class="calm">Nothing parked for later.</div>`;
     }
     else if (S.tab === "archive") html = g.archived.length ? g.archived.map(it => `<details class="arch"><summary><span class="dot ok"></span><span class="t">${it.num ? `<span class="num">№ ${esc(it.num)}</span> · ` : ""}${esc(it.title)}</span><span class="note">${esc(fmt(it.archived))}</span></summary>${slip(it)}</details>`).join("") : `<p class="note">Finished items will appear here.</p>`;
-    else { const it = find(S.tab); html = it ? slip(it) : ""; }
     main.innerHTML = html;
+    if (S.focus){ const id = S.focus; S.focus = null; focusItem(id); }
+  }
+  function focusItem(id){
+    const art = document.querySelector(`#main article[data-item="${CSS.escape(id)}"]`);
+    if (!art) return;
+    const arch = art.closest("details.arch"); if (arch) arch.open = true;
+    (arch || art).scrollIntoView({ block: "start" });
+  }
+  function openItem(id){
+    const it = find(id); if (!it) return;
+    setTab(groupOf(it)); focusItem(id);
   }
 
   let toastTimer = null;
@@ -376,7 +422,7 @@ details.arch[open] summary{margin-bottom:10px}
   function stepTab(dir){
     const ids = [...document.querySelectorAll("#tabs .tab")].map(b => b.dataset.tab);
     let i = ids.indexOf(S.tab);
-    if (i < 0){ const it = find(S.tab); i = ids.indexOf(it ? groupOf(it) : "overview"); }
+    if (i < 0) i = ids.indexOf("overview");
     const next = ids[i + dir];
     if (!next) return;
     setTab(next);
@@ -386,6 +432,7 @@ details.arch[open] summary{margin-bottom:10px}
     main.classList.add(dir > 0 ? "from-right" : "from-left");
   }
   $("#main").addEventListener("animationend", (ev) => { if (ev.target === ev.currentTarget) ev.currentTarget.classList.remove("from-right", "from-left"); });
+  addEventListener("resize", () => centerTab(false));
   let swipe = null;
   document.addEventListener("touchstart", (ev) => {
     swipe = null;
@@ -394,7 +441,7 @@ details.arch[open] summary{margin-bottom:10px}
     const p = ev.touches[0], edge = 24;
     // Leave the screen edges to the system's back gesture, and leave alone what scrolls sideways or takes typing.
     if (p.clientX < edge || p.clientX > window.innerWidth - edge) return;
-    if (ev.target.closest && ev.target.closest(".rail, pre, textarea, input, select, [contenteditable]")) return;
+    if (ev.target.closest && ev.target.closest(".rail, .copybox, pre, textarea, input, select, [contenteditable]")) return;
     swipe = { x: p.clientX, y: p.clientY, at: Date.now() };
   }, { passive: true });
   document.addEventListener("touchend", (ev) => {
@@ -473,6 +520,7 @@ details.arch[open] summary{margin-bottom:10px}
     if (!el) return;
     if (el.dataset.tab){ setTab(el.dataset.tab); return; }
     const act = el.dataset.act, id = el.dataset.id, it = id ? find(id) : null;
+    if (act === "open"){ openItem(id); return; }
     if (act === "ask-toggle"){
       S.askOpen[id] = !S.askOpen[id];
       if (S.askOpen[id]) refreshReach();

@@ -19,9 +19,11 @@ not when you have time.
 
 ## How the desk works
 
-- **A Needs you tab, and one tab per item.** *Needs you* shows everything
-  waiting for you, one after another; each item also has its own tab. A
-  *decision* has a recommended answer and buttons.
+- **A tab for each group:** *Needs you*, *Decided*, *Later* and
+  *Archive*, each showing its items one after another. A yellow *Urgent*
+  tab appears only when something can't wait, and the Overview starts
+  with it. A link to one item opens its tab and scrolls to it.
+- **A *decision*** has a recommended answer and buttons.
   A *task* (an upload, a sign-in) has steps to tick, text to copy, and the
   guide attached.
 - **You answer whenever you like.** Your answer is saved and also sent to
@@ -36,7 +38,7 @@ not when you have time.
 - **Ask about any item** ("what happens if I say no?"), and the answer
   shows on the same tab.
 - **Swipe left or right** to move between tabs, handy on an iPad or a
-  phone.
+  phone. The tab bar follows, keeping the open tab in the middle.
 
 <p>
   <img src="screenshots/decision-phone-light.png" alt="A decision on a phone: the question, the recommended answer, Yes and Next week buttons, and an earlier question answered" width="300">
