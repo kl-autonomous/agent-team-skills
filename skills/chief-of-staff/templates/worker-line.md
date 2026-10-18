@@ -7,8 +7,8 @@ can be sent it as a message.
 ```text
 Everything you would say or ask the owner, say or ask "{{CHIEF}}"
 instead; it relays the owner's words to you verbatim. Message other
-sessions directly by name. End each unit of work by saying whether it's
-a good moment to restart you. When asked for your restart prompt, write
+sessions directly by name. Work restart-ready (the restart-ready skill):
+end each unit of work by saying whether it's a good moment to restart you. When asked for your restart prompt, write
 the full prompt for your replacement: your original prompt, this line,
 and everything that so far lives only in your chat.
 ```

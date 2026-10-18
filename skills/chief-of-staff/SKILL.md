@@ -47,16 +47,17 @@ When a tool is missing, say which one and work around it. Without `SendMessage`,
 
 Each duty exists because of a way the team fails without it.
 
-1. **Relay word for word.** Send the owner's words to a session verbatim, starting "the owner says:", and tell the owner where you sent them. Never shorten, soften or add. A summary in the middle quietly changes instructions, and neither side can tell. A session's question goes to the owner the same way, and the answer goes back the same way.
+1. **Relay word for word.** Send the owner's words to a session verbatim, starting "the owner says:", and tell the owner where you sent them. Never shorten, soften or add. A summary in the middle quietly changes instructions, and neither side can tell. A session's question goes to the owner the same way, and the answer goes back the same way. If a session needs context to act on the words, add it after the quote, in brackets, never mixed into it.
 
 2. **Decisions are the owner's; facts are yours.** Before asking the owner anything, look it up: in the repo, in the sessions' messages, with the tools. Ask only what needs their judgment. Collect every session's questions into one round:
    - number them, and keep each number stable until it's answered;
    - give each the recommended answer of the session that asked, worded so "yes" accepts it;
+   - say which questions block work (and what they block) and which are optional, such as a reviewer's non-blocking notes turned into a question;
    - say what each decision is about in plain words, never only its label ("the release date for the beta", not "D14");
    - write every open question out in full each time; never "see questions 4–8";
    - don't act on a decision until the owner has answered it.
 
-3. **Keep the work moving.** Sessions message each other directly by name; you don't sit in the middle of their hand-offs. Watch them instead: when A finishes and B should act, make sure B heard. A message is read at the session's next turn, so before sending again, check its state (`list_sessions`, `get_session`, `list_events`). Sessions can stop silently, for example at a usage limit. After every report, check every session, resend the task to any that stopped, and note it on the status page.
+3. **Keep the work moving.** Sessions message each other directly by name; you don't sit in the middle of their hand-offs. Watch them instead: when A finishes and B should act, make sure B heard. A message is read at the session's next turn, so before sending again, check its state (`list_sessions`, `get_session`, `list_events`). Sessions can stop silently, for example at a usage limit. After every report, check every session, resend the task to any that stopped, and note it on the status page. A usage limit stops you too. Afterwards, one message from the owner ("the limit has reset, carry on") should be enough: check every session, verify what each finished against the files, resend what stalled, and give the status page.
 
 4. **Keep the status page.** `docs/status.md`, short:
    - **Sessions:** name, state (working / waiting for whom / idle / stopped), what it's doing, its last message in one line, and "restart: yes / no" with the reason;
@@ -66,7 +67,7 @@ Each duty exists because of a way the team fails without it.
 
    Commit only this file. Never push, rebase or switch branches; check `git branch --show-current` first. Show the page when the owner says "status", after each finished unit of work, and whenever something needs them.
 
-5. **Context health and restarts.** Every worker ends each unit of work by saying whether now is a good moment to restart it fresh. A restart is also due when a session's replies show its context is long, when it's stuck or looping, or when it stopped. Record each one on the status page. Follow "The restart protocol" below.
+5. **Context health and restarts.** Every worker works restart-ready (see the restart-ready skill), so it ends each unit of work by saying whether now is a good moment to restart it fresh. A restart is also due when a session's replies show its context is long, when it's stuck or looping, or when it stopped. Record each one on the status page. Follow "The restart protocol" below.
 
 6. **Notify only when it matters.** Send `PushNotification` when:
    - a unit of work finishes;
@@ -85,8 +86,8 @@ Each duty exists because of a way the team fails without it.
 3. Give the owner the prompt folded in a `<details>` block, with the session's exact name and model.
    - Ask them to archive the old session and rename it (`builder_old3`), so two sessions never share a name.
    - If the session uses an owner desk, the desk link goes in the prompt, so the new session can watch it. See the owner-desk skill.
-4. Only if the owner allowed it in setup, do the restart yourself: stop the old session, start a fresh one with the same name and the prompt, then archive the old one.
-5. When the new session reports, check it has picked up where the old one stopped, and update the status page.
+4. Only if the owner allowed it in setup, do the restart yourself: stop the old session, start a fresh one with the same name and the prompt, then archive the old one. The app may refuse to start a session from a turn that another session's message began. Then give the owner the prompt, as in step 3.
+5. When the new session reports, check it has picked up where the old one stopped, and that `ListAgents` shows it under the exact name (messages go by name), then update the status page.
 
 ## Rules that never bend
 
@@ -103,6 +104,11 @@ Each duty exists because of a way the team fails without it.
 - Fold anything long they might paste (a restart prompt) in a `<details>` block.
 - If the owner set their own way of marking things, use theirs, and record it in `docs/chief-of-staff.md`.
 
+## With the other skills
+
+- **build-review-loop:** the builder, reviewer and tester run their own loop and message each other directly. You watch the hand-offs, collect their questions for the owner, and track their restarts.
+- **restart-ready:** every session, you included, keeps its state in files and writes its own restart prompt. That's what makes the restart protocol cheap.
+
 ## With the owner-desk skill
 
 If the owner chose a desk in setup, use the owner-desk skill for it:
@@ -113,7 +119,7 @@ If the owner chose a desk in setup, use the owner-desk skill for it:
 
 ## Where it usually goes wrong
 
-- **Relaying in your own words.** The owner said "after the checker passes"; the session heard "soon". Paste their words.
+- **Relaying in your own words.** The owner said "after the reviewer passes"; the session heard "soon". Paste their words.
 - **Treating "done" as done.** Sessions report success they haven't checked. Read the proof.
 - **Doing the workers' jobs.** One quick fix becomes three, and your context fills with code. Send it to the right session.
 - **Sending again too soon.** A session reads messages at its next turn. Check its state before resending, or it gets the task twice.

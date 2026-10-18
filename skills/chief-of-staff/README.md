@@ -44,25 +44,25 @@ A made-up project: a small recipe app with three sessions.
 | Session | Job |
 |---|---|
 | `builder` | builds each feature, with tests |
-| `checker` | reviews each feature in its own copy of the code |
+| `reviewer` | checks each feature in its own copy of the code |
 | `feedback` | reads beta testers' notes and sends bugs to the builder |
 | `chief-of-staff` | everything between you and the three of them |
 
 A message from you:
 
-> tell the builder to ship the search fix once the checker passes it
+> tell the builder to ship the search fix once the reviewer passes it
 
 reaches the builder as:
 
 > the owner says: "tell the builder to ship the search fix once the
-> checker passes it"
+> reviewer passes it"
 
-When the builder and the checker both have questions, you get one round:
+When the builder and the reviewer both have questions, you get one round:
 
 > 🔴 3. Show recipes without photos in search? The builder recommends
 > yes: about a third have no photo yet.
 >
-> 🔴 4. Restart the checker now? Its chat is long and everything is
+> 🔴 4. Restart the reviewer now? Its chat is long and everything is
 > committed. Yes?
 
 ## Install
@@ -94,9 +94,13 @@ to see the whole team.
 
 ## Works well with
 
-[owner-desk](../owner-desk/): a live board for everything only you can
-decide or do. With both installed, the chief of staff posts everything it's
-waiting on you for to the desk, and acts on your answers there.
+- [owner-desk](../owner-desk/): a live board for everything only you can
+  decide or do. With both installed, the chief of staff posts everything
+  it's waiting on you for to the desk, and acts on your answers there.
+- [build-review-loop](../build-review-loop/): the builder and reviewer
+  the chief of staff keeps moving.
+- [restart-ready](../restart-ready/): what lets every session, the chief
+  included, restart without losing anything.
 
 ## License
 

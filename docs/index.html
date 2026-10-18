@@ -58,6 +58,8 @@ header.hero{display:flex;flex-direction:column;gap:18px}
 .name{font-family:var(--font-mono);font-size:14px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface)}
 .name.cos{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
 .name.desk{border-color:color-mix(in srgb,var(--needs) 45%,var(--line))}
+.name.rr{border-color:color-mix(in srgb,var(--later) 50%,var(--line))}
+.name.brl{border-color:color-mix(in srgb,var(--wait) 50%,var(--line))}
 
 /* the before/after picture */
 .compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
@@ -86,12 +88,16 @@ svg .small{font-size:10px;fill:var(--muted)}
 .tag{align-self:flex-start;font-family:var(--font-mono);font-size:12px;padding:1px 8px;border-radius:999px}
 .tag.cos{background:var(--accent-soft);color:var(--accent)}
 .tag.desk{background:var(--needs-soft);color:var(--needs)}
+.tag.rr{background:var(--later-soft);color:var(--later)}
+.tag.brl{background:var(--wait-soft);color:var(--wait)}
 
 /* the two skills */
 .skills{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;align-items:start}
 .skill{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:24px;display:flex;flex-direction:column;gap:16px;min-width:0}
 .skill .k{font-family:var(--font-mono);font-size:15px;color:var(--accent)}
 .skill.d .k{color:var(--needs)}
+.skill.r .k{color:var(--later)}
+.skill.b .k{color:var(--wait)}
 .skill ul{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px}
 .slip{font-family:var(--font-mono);font-size:13px;line-height:1.55;background:var(--code);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:2px;overflow-x:auto}
 .slip .hd{color:var(--muted)}
@@ -119,9 +125,9 @@ svg .small{font-size:10px;fill:var(--muted)}
 .example{font-size:13px;color:var(--muted)}
 
 /* one or both */
-.modes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
 .mode{border-top:3px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
-.mode.a{border-color:var(--accent)} .mode.b{border-color:var(--needs)} .mode.c{border-color:var(--ink)}
+.mode.a{border-color:var(--later)} .mode.b{border-color:var(--wait)} .mode.c{border-color:var(--accent)} .mode.d{border-color:var(--needs)}
 .mode p{color:var(--muted);font-size:16px}
 
 /* rules and needs */
@@ -158,10 +164,12 @@ section{display:flex;flex-direction:column;gap:22px}
 <div class="wrap">
 
   <header class="hero">
-    <span class="eyebrow">Two skills for the Claude desktop app</span>
+    <span class="eyebrow">Four skills for Claude Code</span>
     <h1>Run a team of Claude sessions without reading every chat.</h1>
-    <p class="lede"><b>chief-of-staff</b> puts one session between you and the rest of the team. <b>owner-desk</b> gives you one board for everything only you can decide or do. Use either one, or both.</p>
+    <p class="lede"><b>restart-ready</b> lets any session restart without losing work. <b>build-review-loop</b> has a second session check the first one's work. <b>chief-of-staff</b> puts one session between you and the rest of the team. <b>owner-desk</b> gives you one board for everything only you can decide or do. Use what you need.</p>
     <div class="names" aria-label="The two skills">
+      <span class="name rr">restart-ready</span>
+      <span class="name brl">build-review-loop</span>
       <span class="name cos">chief-of-staff</span>
       <span class="name desk">owner-desk</span>
     </div>
@@ -178,7 +186,7 @@ section{display:flex;flex-direction:column;gap:22px}
           <line class="strain" x1="160" y1="120" x2="52" y2="200"/>
           <line class="strain" x1="160" y1="120" x2="268" y2="200"/>
           <rect class="node" x="10" y="25" width="84" height="30" rx="7"/><text x="52" y="44" text-anchor="middle">builder</text>
-          <rect class="node" x="226" y="25" width="84" height="30" rx="7"/><text x="268" y="44" text-anchor="middle">checker</text>
+          <rect class="node" x="226" y="25" width="84" height="30" rx="7"/><text x="268" y="44" text-anchor="middle">reviewer</text>
           <rect class="node" x="10" y="185" width="84" height="30" rx="7"/><text x="52" y="204" text-anchor="middle">tester</text>
           <rect class="node" x="226" y="185" width="84" height="30" rx="7"/><text x="268" y="204" text-anchor="middle">feedback</text>
           <circle class="you" cx="160" cy="120" r="30"/><text class="you-t" x="160" y="124" text-anchor="middle">you</text>
@@ -188,7 +196,7 @@ section{display:flex;flex-direction:column;gap:22px}
         <p class="cap"><b>You are the switchboard.</b> Every message passes through you, questions hide in four chats, and nobody notices when a session stops.</p>
       </figure>
       <figure class="panel" style="margin:0">
-        <span class="label">With both skills</span>
+        <span class="label">With the skills</span>
         <svg viewBox="0 0 320 240" role="img" aria-label="With both skills: you talk to one chief-of-staff session and answer on the owner desk; the chief of staff talks to the four sessions, which also hand work to each other.">
           <line class="calm" x1="70" y1="48" x2="160" y2="125"/>
           <line class="side" x1="94" y1="48" x2="190" y2="48"/>
@@ -204,7 +212,7 @@ section{display:flex;flex-direction:column;gap:22px}
           <rect class="desk" x="190" y="32" width="100" height="32" rx="7"/><text x="240" y="52" text-anchor="middle">owner-desk</text>
           <rect class="cos" x="95" y="108" width="130" height="34" rx="8"/><text x="160" y="129" text-anchor="middle">chief-of-staff</text>
           <rect class="node" x="5" y="191" width="70" height="28" rx="7"/><text x="40" y="209" text-anchor="middle">builder</text>
-          <rect class="node" x="85" y="191" width="70" height="28" rx="7"/><text x="120" y="209" text-anchor="middle">checker</text>
+          <rect class="node" x="85" y="191" width="70" height="28" rx="7"/><text x="120" y="209" text-anchor="middle">reviewer</text>
           <rect class="node" x="165" y="191" width="70" height="28" rx="7"/><text x="200" y="209" text-anchor="middle">tester</text>
           <rect class="node" x="245" y="191" width="70" height="28" rx="7"/><text x="280" y="209" text-anchor="middle">feedback</text>
           <text class="small" x="142" y="40" text-anchor="middle">answer any time</text>
@@ -239,7 +247,11 @@ section{display:flex;flex-direction:column;gap:22px}
       </div>
       <div class="change">
         <p class="before"><span class="label">Without</span>Long chats get slow and forgetful, and restarting one loses what only lived in that chat.</p>
-        <div class="after"><span class="tag cos">chief-of-staff</span><p>Each session says when it's a good moment to restart, then writes the prompt for its own replacement. You paste it into a fresh session, and nothing is lost.</p></div>
+        <div class="after"><span class="tag rr">restart-ready</span><p>Everything a session knows lives in a few short files. It says when it's a good moment to restart, then writes the prompt for its own replacement. You paste it into a fresh session, and nothing is lost.</p></div>
+      </div>
+      <div class="change">
+        <p class="before"><span class="label">Without</span>Your AI says all the tests pass, and the bug is still there.</p>
+        <div class="after"><span class="tag brl">build-review-loop</span><p>A second session checks the exact commit in its own copy, re-runs everything, and makes sure each new test fails on the old code. Only real problems send work back.</p></div>
       </div>
       <div class="change">
         <p class="before"><span class="label">Without</span>A task only you can do, such as an upload or a sign-in, is a long paragraph you have to scroll back to find.</p>
@@ -253,8 +265,40 @@ section{display:flex;flex-direction:column;gap:22px}
   </section>
 
   <section aria-labelledby="skills">
-    <h2 id="skills" class="read">The two skills</h2>
+    <h2 id="skills" class="read">The four skills</h2>
     <div class="skills">
+      <article class="skill r">
+        <span class="k">restart-ready</span>
+        <h3>Sessions you can throw away</h3>
+        <p>A long chat gets slow and forgetful. If everything that matters is in files, a fresh session picks up where the old one stopped.</p>
+        <ul>
+          <li>Keeps a short state file: done, in progress, next, waiting for whom. History goes to a separate log.</li>
+          <li>Reads only what the step needs, and sends wide searches to a sub-agent.</li>
+          <li>Writes corrections down at once, so the next session doesn't repeat them.</li>
+          <li>Ends each unit of work by saying whether it's a good moment to restart it.</li>
+        </ul>
+        <div class="slip" aria-label="Example restart line">
+          <span class="hd">end of a review</span>
+          <span>Context: long, after three reviews. Good moment to restart me: yes. Everything is committed.</span>
+        </div>
+      </article>
+
+      <article class="skill b">
+        <span class="k">build-review-loop</span>
+        <h3>Two sessions that check each other</h3>
+        <p>A builder builds one step of the plan at a time. An independent reviewer, on a different model, checks it before the next step starts.</p>
+        <ul>
+          <li>The reviewer checks the exact commit in its own copy, and re-runs everything.</li>
+          <li>One verdict: PASS, FIX with a numbered list, or STOP for you.</li>
+          <li>Only real problems block: lost data, privacy, wrong results, a broken build. Style doesn't.</li>
+          <li>Two disagreements on the same point come to you. An optional tester tries to break the risky parts.</li>
+        </ul>
+        <div class="slip" aria-label="Example verdict">
+          <span class="hd">to: builder</span>
+          <span>Verdict: FIX. 1. The new test also passes on the old code, so it proves nothing.</span>
+        </div>
+      </article>
+
       <article class="skill">
         <span class="k">chief-of-staff</span>
         <h3>One session between you and the team</h3>
@@ -269,10 +313,10 @@ section{display:flex;flex-direction:column;gap:22px}
         </ul>
         <div class="slip" aria-label="Example messages">
           <span class="hd">to: builder</span>
-          <span>the owner says: “Ship the fix after the checker's PASS.”</span>
+          <span>the owner says: “Ship the fix after the reviewer's PASS.”</span>
           <span class="hd" style="margin-top:8px">to: you</span>
           <span class="q"><span class="dot needs" aria-hidden="true"></span><span>3. Move the release to Friday? Recommended: yes.</span></span>
-          <span class="q"><span class="dot needs" aria-hidden="true"></span><span>4. Restart the checker now? Its chat is long. Recommended: yes.</span></span>
+          <span class="q"><span class="dot needs" aria-hidden="true"></span><span>4. Restart the reviewer now? Its chat is long. Recommended: yes.</span></span>
         </div>
       </article>
 
@@ -297,7 +341,7 @@ section{display:flex;flex-direction:column;gap:22px}
           <div class="item">
             <div class="meta"><span class="mono">№ 12</span><span>Decision</span><span class="pill needs" id="mock-pill"><span class="dot needs" aria-hidden="true"></span>Needs you</span><span>from builder</span></div>
             <h4>Open the beta to testers this Friday?</h4>
-            <div class="rec"><span class="label">Recommended</span>Yes. The checker passed every fix, and the release notes are ready.</div>
+            <div class="rec"><span class="label">Recommended</span>Yes. The reviewer passed every fix, and the release notes are ready.</div>
             <div class="choices" role="group" aria-label="Your answer">
               <button class="choice" id="mock-yes" type="button" aria-pressed="false">Yes</button>
               <button class="choice" id="mock-no" type="button" aria-pressed="false">Next week</button>
@@ -311,11 +355,12 @@ section{display:flex;flex-direction:column;gap:22px}
   </section>
 
   <section aria-labelledby="modes">
-    <h2 id="modes" class="read">Use one, or both</h2>
+    <h2 id="modes" class="read">Use what you need</h2>
     <div class="modes">
-      <div class="mode a"><h3>chief-of-staff alone</h3><p>Questions come to you in chat, numbered, each with a recommended answer.</p></div>
-      <div class="mode b"><h3>owner-desk alone</h3><p>The one session you work with posts to the board and reads your answers.</p></div>
-      <div class="mode c"><h3>Both</h3><p>The chief of staff puts everything it's waiting on you for onto the desk, and is the only one that writes to it.</p></div>
+      <div class="mode a"><h3>One session</h3><p>restart-ready: restart whenever the chat grows, and lose nothing.</p></div>
+      <div class="mode b"><h3>Two sessions</h3><p>Add build-review-loop: one builds, the other checks every step.</p></div>
+      <div class="mode c"><h3>Three or more</h3><p>Add chief-of-staff: you talk to one session, and it runs the rest.</p></div>
+      <div class="mode d"><h3>Decisions piling up</h3><p>Add owner-desk: one board for what only you can decide or do. With a chief of staff, it's the only one that writes to it.</p></div>
     </div>
   </section>
 
@@ -333,9 +378,9 @@ section{display:flex;flex-direction:column;gap:22px}
       </div>
       <div class="need">
         <h2 style="font-size:26px">What you need</h2>
-        <p>The Claude desktop app (Code tab), where sessions can see and message each other.</p>
-        <p>For owner-desk: Claude artifacts with a database, in claude.ai or the desktop app.</p>
-        <p style="color:var(--muted)">Neither skill works in plain terminal Claude Code.</p>
+        <p>restart-ready works in any Claude Code session.</p>
+        <p>build-review-loop and chief-of-staff need the Claude desktop app (Code tab), where sessions can see and message each other.</p>
+        <p>owner-desk needs Claude artifacts with a database, in claude.ai or the desktop app.</p>
       </div>
     </div>
   </section>
@@ -343,11 +388,11 @@ section{display:flex;flex-direction:column;gap:22px}
   <section class="origin" aria-labelledby="origin">
     <div class="sec-head read">
       <h2 id="origin">Where it comes from</h2>
-      <p class="lede">Both skills came out of a real project: an iPhone app built by a team of Claude sessions, taken from its first decision to a beta with testers in 9 days. The owner wrote no app code and made every decision.</p>
+      <p class="lede">All four came out of a real project: an iPhone app built by a team of Claude sessions, taken from its first decision to a beta with testers in 9 days. The owner wrote no app code and made every decision.</p>
     </div>
     <div class="figs">
-      <div class="fig"><span class="n">1</span><span class="l">conversation for the owner, instead of one per session</span></div>
-      <div class="fig"><span class="n">12</span><span class="l">sessions restarted fresh, with nothing lost</span></div>
+      <div class="fig"><span class="n">12</span><span class="l">blocking problems the reviewer caught before anything merged</span></div>
+      <div class="fig"><span class="n">12</span><span class="l">restarts, with nothing lost</span></div>
       <div class="fig"><span class="n">18 / 30</span><span class="l">desk items closed on the desk's first day</span></div>
     </div>
   </section>

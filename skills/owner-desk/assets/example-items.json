@@ -79,7 +79,7 @@
       "status": "answered",
       "num": 14,
       "priority": 3,
-      "from": "checker",
+      "from": "reviewer",
       "created": "2026-10-18T08:40:00Z",
       "title": "Keep the free plan at three saved lists?",
       "short": "Free plan",
@@ -152,7 +152,7 @@
       "kind": "task",
       "status": "archived",
       "num": 10,
-      "from": "checker",
+      "from": "reviewer",
       "created": "2026-10-17T09:00:00Z",
       "title": "Sign in to the test account on the second phone",
       "steps": [
@@ -168,7 +168,7 @@
         "note": "",
         "at": "2026-10-17T09:40:00Z"
       },
-      "outcome": "Both test phones now sync; the checker passed the sync test.",
+      "outcome": "Both test phones now sync; the reviewer passed the sync test.",
       "archived": "2026-10-17T10:15:00Z"
     }
   }

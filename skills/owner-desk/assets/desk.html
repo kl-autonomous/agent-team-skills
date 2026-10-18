@@ -160,7 +160,7 @@ details.arch[open] summary{margin-bottom:10px}
       stepsDone: [0],
       copies: [{ label: "What to test", text: "Search now finds recipes by ingredient. Try a search with two ingredients, and tell us if anything is missing." }],
       links: [{ label: "Upload guide (PDF)", url: "#", note: "two pages, with pictures" }] },
-    { id: "q14", kind: "decision", status: "answered", num: 14, priority: 3, from: "checker", created: "2026-10-18T08:40:00Z",
+    { id: "q14", kind: "decision", status: "answered", num: 14, priority: 3, from: "reviewer", created: "2026-10-18T08:40:00Z",
       title: "Keep the free plan at three saved lists?", short: "Free plan",
       recommendation: "Keep three. Raising it later is easy; lowering it isn't.", choices: ["Keep three", "Raise to five", "No limit"],
       answer: { choice: "Keep three", note: "", at: "2026-10-18T09:05:00Z" } },
@@ -172,11 +172,11 @@ details.arch[open] summary{margin-bottom:10px}
       title: "Use the new app icon?", choices: ["Yes", "No"],
       answer: { choice: "Yes", note: "", at: "2026-10-17T11:00:00Z" },
       outcome: "The builder switched to the new icon; it's in build 1.2.", archived: "2026-10-17T12:30:00Z" },
-    { id: "t-signin", kind: "task", status: "archived", num: 10, from: "checker", created: "2026-10-17T09:00:00Z",
+    { id: "t-signin", kind: "task", status: "archived", num: 10, from: "reviewer", created: "2026-10-17T09:00:00Z",
       title: "Sign in to the test account on the second phone",
       steps: ["Open Settings on the second phone.", "Sign in with the test account."], stepsDone: [0, 1],
       answer: { choice: "Done", note: "", at: "2026-10-17T09:40:00Z" },
-      outcome: "Both test phones now sync; the checker passed the sync test.", archived: "2026-10-17T10:15:00Z" }
+      outcome: "Both test phones now sync; the reviewer passed the sync test.", archived: "2026-10-17T10:15:00Z" }
   ];
 
   const S = { items: [], loaded: false, tab: null, pick: {}, notes: {}, editing: {}, busy: {}, db: null, comments: null,
