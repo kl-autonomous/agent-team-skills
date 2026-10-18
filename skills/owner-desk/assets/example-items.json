@@ -1,0 +1,175 @@
+[
+  {
+    "op": "set",
+    "collection": "items",
+    "doc_id": "q12",
+    "data": {
+      "kind": "decision",
+      "status": "open",
+      "num": 12,
+      "priority": 1,
+      "from": "builder",
+      "created": "2026-10-18T09:10:00Z",
+      "title": "Open the beta to testers this Friday?",
+      "short": "Beta date",
+      "body": [
+        "Every fix has passed review, and the notes for testers are written."
+      ],
+      "recommendation": "Yes. Waiting a week adds nothing we know of.",
+      "choices": [
+        "Yes",
+        "Next week"
+      ],
+      "asks": [
+        {
+          "q": "Will testers see my own data?",
+          "at": "2026-10-18T09:30:00Z",
+          "via": "comment",
+          "a": "No. The beta starts empty; your data stays on your phone.",
+          "aAt": "2026-10-18T09:32:00Z"
+        }
+      ]
+    }
+  },
+  {
+    "op": "set",
+    "collection": "items",
+    "doc_id": "t-upload",
+    "data": {
+      "kind": "task",
+      "status": "open",
+      "num": 13,
+      "priority": 2,
+      "from": "builder",
+      "created": "2026-10-18T09:12:00Z",
+      "title": "Upload build 1.2 to the beta",
+      "short": "Upload build",
+      "body": [
+        "Only you can do this: it needs your developer account."
+      ],
+      "steps": [
+        "Open the developer site and sign in.",
+        "Pick build 1.2 and add it to the testers' group.",
+        "Paste the notes below into “What to test”."
+      ],
+      "stepsDone": [
+        0
+      ],
+      "copies": [
+        {
+          "label": "What to test",
+          "text": "Search now finds recipes by ingredient. Try a search with two ingredients, and tell us if anything is missing."
+        }
+      ],
+      "links": [
+        {
+          "label": "Upload guide (PDF)",
+          "url": "#",
+          "note": "two pages, with pictures"
+        }
+      ]
+    }
+  },
+  {
+    "op": "set",
+    "collection": "items",
+    "doc_id": "q14",
+    "data": {
+      "kind": "decision",
+      "status": "answered",
+      "num": 14,
+      "priority": 3,
+      "from": "checker",
+      "created": "2026-10-18T08:40:00Z",
+      "title": "Keep the free plan at three saved lists?",
+      "short": "Free plan",
+      "recommendation": "Keep three. Raising it later is easy; lowering it isn't.",
+      "choices": [
+        "Keep three",
+        "Raise to five",
+        "No limit"
+      ],
+      "answer": {
+        "choice": "Keep three",
+        "note": "",
+        "at": "2026-10-18T09:05:00Z"
+      }
+    }
+  },
+  {
+    "op": "set",
+    "collection": "items",
+    "doc_id": "q15",
+    "data": {
+      "kind": "decision",
+      "status": "open",
+      "later": true,
+      "num": 15,
+      "from": "feedback",
+      "created": "2026-10-17T16:00:00Z",
+      "title": "Charge for sync between devices, after version 2?",
+      "short": "Paid sync",
+      "body": [
+        "Two testers asked for it. Nothing waits on this until version 2."
+      ],
+      "recommendation": "Decide after the beta, with the testers' numbers.",
+      "choices": [
+        "Yes",
+        "No",
+        "Decide later"
+      ]
+    }
+  },
+  {
+    "op": "set",
+    "collection": "items",
+    "doc_id": "q11",
+    "data": {
+      "kind": "decision",
+      "status": "archived",
+      "num": 11,
+      "from": "builder",
+      "created": "2026-10-17T10:00:00Z",
+      "title": "Use the new app icon?",
+      "choices": [
+        "Yes",
+        "No"
+      ],
+      "answer": {
+        "choice": "Yes",
+        "note": "",
+        "at": "2026-10-17T11:00:00Z"
+      },
+      "outcome": "The builder switched to the new icon; it's in build 1.2.",
+      "archived": "2026-10-17T12:30:00Z"
+    }
+  },
+  {
+    "op": "set",
+    "collection": "items",
+    "doc_id": "t-signin",
+    "data": {
+      "kind": "task",
+      "status": "archived",
+      "num": 10,
+      "from": "checker",
+      "created": "2026-10-17T09:00:00Z",
+      "title": "Sign in to the test account on the second phone",
+      "steps": [
+        "Open Settings on the second phone.",
+        "Sign in with the test account."
+      ],
+      "stepsDone": [
+        0,
+        1
+      ],
+      "answer": {
+        "choice": "Done",
+        "note": "",
+        "at": "2026-10-17T09:40:00Z"
+      },
+      "outcome": "Both test phones now sync; the checker passed the sync test.",
+      "archived": "2026-10-17T10:15:00Z"
+    }
+  }
+]

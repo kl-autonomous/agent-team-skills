@@ -1,0 +1,15 @@
+{
+  "name": "agent-team-skills",
+  "owner": { "name": "kl-autonomous" },
+  "plugins": [
+    {
+      "name": "agent-team-skills",
+      "source": "./",
+      "description": "Run a team of Claude sessions without reading every chat: a chief-of-staff session between you and the team, and an owner desk for everything only you can decide or do.",
+      "version": "1.0.0",
+      "author": { "name": "kl-autonomous" },
+      "category": "productivity",
+      "homepage": "https://github.com/kl-autonomous/agent-team-skills"
+    }
+  ]
+}

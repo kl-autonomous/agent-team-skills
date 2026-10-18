@@ -1,0 +1,488 @@
+<title>{{TITLE}}</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a desk. A sticky rail of tabs (one per open item) above one open slip at a time. */
+:root{
+  --bg:#F4F3F1; --surface:#FFFFFF; --ink:#1B1C20; --muted:#63646C; --line:#E0DED9;
+  --accent:#B8324A; --accent-soft:#F7E2E6; --on-accent:#FFFFFF;
+  --wait:#8A600F; --wait-soft:#F5EAD3;
+  --ok:#2A6F52; --ok-soft:#DDEFE5;
+  --later:#56627C; --later-soft:#E5E9F1;
+  --code-bg:#F0EEEA;
+  --font-ui:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","PingFang SC","Noto Sans","Noto Sans CJK SC",system-ui,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#131418; --surface:#1C1D22; --ink:#EFEEF2; --muted:#A2A2AB; --line:#32333A;
+  --accent:#F06882; --accent-soft:#3A1D25; --on-accent:#1B0A0F;
+  --wait:#E3B04F; --wait-soft:#33290F;
+  --ok:#62C497; --ok-soft:#16301F;
+  --later:#9AA8C6; --later-soft:#232A39;
+  --code-bg:#25262C; color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#131418; --surface:#1C1D22; --ink:#EFEEF2; --muted:#A2A2AB; --line:#32333A;
+  --accent:#F06882; --accent-soft:#3A1D25; --on-accent:#1B0A0F;
+  --wait:#E3B04F; --wait-soft:#33290F;
+  --ok:#62C497; --ok-soft:#16301F;
+  --later:#9AA8C6; --later-soft:#232A39;
+  --code-bg:#25262C; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-ui);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 56px}
+header.top{display:flex;flex-direction:column;gap:2px;padding-block:8px 14px}
+.eyebrow{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+h1{font-size:26px;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
+.lede{margin:4px 0 0;color:var(--muted);max-width:60ch}
+.banner{margin:4px 0 12px;padding:10px 12px;border-radius:8px;background:var(--later-soft);color:var(--later);font-size:13.5px}
+
+.rail{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:8px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line)}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;padding-bottom:2px}
+.tab{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;max-width:240px;border:1px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:13.5px;padding:6px 11px;border-radius:999px;cursor:pointer}
+.tab span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab[aria-selected="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.tab:focus-visible,button:focus-visible,textarea:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.tab-sep{flex:0 0 1px;align-self:stretch;background:var(--line);margin:3px 4px}
+.rail-label{flex:0 0 auto;align-self:center;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-right:2px}
+.dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;background:var(--muted)}
+.dot.needs{background:var(--accent)} .dot.wait{background:var(--wait)} .dot.ok{background:var(--ok)} .dot.later{background:var(--later)}
+.count{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
+
+main{padding-top:18px;display:flex;flex-direction:column;gap:16px}
+.slip{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px 20px 18px;display:flex;flex-direction:column;gap:14px;min-width:0}
+.slip.answered{border-color:color-mix(in srgb,var(--wait) 45%,var(--line))}
+.slip.decided{opacity:.88}
+.meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:12.5px;color:var(--muted)}
+.num{font-family:var(--font-mono);font-weight:500;color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;padding:2px 9px;border-radius:999px}
+.pill.needs{background:var(--accent-soft);color:var(--accent)}
+.pill.wait{background:var(--wait-soft);color:var(--wait)}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.later{background:var(--later-soft);color:var(--later)}
+.kind{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase}
+h2{font-size:20px;line-height:1.35;margin:0;font-weight:700;text-wrap:balance}
+.body p{margin:0 0 8px;max-width:65ch}
+.body ul{margin:0 0 8px;padding-left:20px;max-width:65ch}
+.rec{border-left:3px solid var(--ink);padding:6px 0 6px 12px}
+.rec .label,.sec-label{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+.choices{display:flex;flex-wrap:wrap;gap:8px}
+.choice{font:inherit;font-size:14.5px;padding:8px 16px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.choice[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+textarea{width:100%;min-height:72px;font:inherit;font-size:14px;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;resize:vertical}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.primary{font:inherit;font-weight:700;font-size:14.5px;padding:9px 18px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);cursor:pointer}
+.primary[disabled]{opacity:.45;cursor:default}
+.ghost{font:inherit;font-size:13.5px;padding:6px 12px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer}
+.hint{font-size:12.5px;color:var(--muted)}
+.answer{background:var(--wait-soft);border-radius:8px;padding:10px 12px}
+.answer b{font-weight:700}
+.outcome{background:var(--ok-soft);border-radius:8px;padding:10px 12px}
+ol.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px;counter-reset:s}
+ol.steps li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:start;counter-increment:s}
+ol.steps input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent)}
+ol.steps label{min-width:0}
+ol.steps label::before{content:counter(s) ". ";font-family:var(--font-mono);font-size:13px;color:var(--muted)}
+ol.steps li.done label{color:var(--muted);text-decoration:line-through;text-decoration-color:color-mix(in srgb,var(--muted) 60%,transparent)}
+.copybox{border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.copybox .head{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:6px 8px 6px 12px;background:var(--code-bg);font-size:13px;font-weight:500}
+.copybox pre{margin:0;padding:10px 12px;max-height:240px;overflow:auto;font-family:var(--font-mono);font-size:12.5px;line-height:1.55;white-space:pre-wrap;word-break:break-word;background:var(--surface)}
+.links{display:flex;flex-direction:column;gap:6px}
+.links a{color:var(--accent);font-weight:500;text-underline-offset:3px}
+.asks{display:flex;flex-direction:column;gap:8px}
+.ask{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ask .q{font-weight:500;white-space:pre-wrap}
+.ask .a{background:var(--later-soft);border-radius:6px;padding:8px 10px;white-space:pre-wrap}
+.ask .pending{font-size:12.5px;color:var(--wait)}
+.askbox{display:flex;flex-direction:column;gap:8px;border-top:1px dashed var(--line);padding-top:12px}
+.overview .list{display:flex;flex-direction:column}
+.ov-row{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:11px 0;border-top:1px solid var(--line);background:none;border-left:0;border-right:0;border-bottom:0;font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}
+.ov-row:first-child{border-top:0}
+.ov-row .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qchip{font-size:11.5px;font-weight:500;padding:1px 8px;border-radius:999px;background:var(--wait-soft);color:var(--wait);white-space:nowrap}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.tile .n{font-family:var(--font-mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
+.tile .l{font-size:12.5px;color:var(--muted)}
+.tile.needs .n{color:var(--accent)} .tile.wait .n{color:var(--wait)}
+.calm{background:var(--ok-soft);color:var(--ok);border-radius:var(--r);padding:16px 18px;font-weight:700}
+.reach{font-size:12.5px;color:var(--muted)}
+.divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin-top:6px}
+.divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
+.divider span{flex:0 1 auto;text-align:center}
+details.arch{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 16px}
+details.arch summary{cursor:pointer;display:flex;gap:10px;align-items:baseline;list-style:none}
+details.arch summary::-webkit-details-marker{display:none}
+details.arch summary .t{flex:1;min-width:0}
+details.arch[open] summary{margin-bottom:10px}
+.note{font-size:13px;color:var(--muted)}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:20;max-width:calc(100% - 32px)}
+@media (max-width:520px){ .tiles{grid-template-columns:repeat(2,minmax(0,1fr))} .slip{padding:16px} h1{font-size:22px} }
+@media (prefers-reduced-motion: no-preference){ .slip{animation:rise .18s ease-out} @keyframes rise{from{transform:translateY(4px)}to{transform:none}} }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <span class="eyebrow">{{EYEBROW}}</span>
+    <h1>{{TITLE}}</h1>
+    <p class="lede" id="lede">Questions only you can decide and tasks only you can do. Answer or tick them here whenever you have time.</p>
+  </header>
+  <p class="banner" id="demo-banner" hidden>These are example items. Open this page from Claude to see your own.</p>
+  <nav class="rail" aria-label="Items"><div class="tabs" role="tablist" id="tabs"></div></nav>
+  <main id="main" aria-live="polite">
+    <div class="slip"><p class="note" style="margin:0">Loading your items…</p></div>
+  </main>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  // Who reads the answers, as it fits mid-sentence ("the chief of staff", "Claude").
+  const AGENT = "{{AGENT}}";
+  const Agent = AGENT.charAt(0).toUpperCase() + AGENT.slice(1);
+
+  // Shown only when the page is opened outside Claude (a plain browser, a preview).
+  const DEMO = [
+    { id: "q12", kind: "decision", status: "open", num: 12, priority: 1, from: "builder", created: "2026-10-18T09:10:00Z",
+      title: "Open the beta to testers this Friday?", short: "Beta date",
+      body: ["Every fix has passed review, and the notes for testers are written."],
+      recommendation: "Yes. Waiting a week adds nothing we know of.", choices: ["Yes", "Next week"],
+      asks: [{ q: "Will testers see my own data?", at: "2026-10-18T09:30:00Z", via: "comment",
+               a: "No. The beta starts empty; your data stays on your phone.", aAt: "2026-10-18T09:32:00Z" }] },
+    { id: "t-upload", kind: "task", status: "open", num: 13, priority: 2, from: "builder", created: "2026-10-18T09:12:00Z",
+      title: "Upload build 1.2 to the beta", short: "Upload build",
+      body: ["Only you can do this: it needs your developer account."],
+      steps: ["Open the developer site and sign in.", "Pick build 1.2 and add it to the testers' group.", "Paste the notes below into “What to test”."],
+      stepsDone: [0],
+      copies: [{ label: "What to test", text: "Search now finds recipes by ingredient. Try a search with two ingredients, and tell us if anything is missing." }],
+      links: [{ label: "Upload guide (PDF)", url: "#", note: "two pages, with pictures" }] },
+    { id: "q14", kind: "decision", status: "answered", num: 14, priority: 3, from: "checker", created: "2026-10-18T08:40:00Z",
+      title: "Keep the free plan at three saved lists?", short: "Free plan",
+      recommendation: "Keep three. Raising it later is easy; lowering it isn't.", choices: ["Keep three", "Raise to five", "No limit"],
+      answer: { choice: "Keep three", note: "", at: "2026-10-18T09:05:00Z" } },
+    { id: "q15", kind: "decision", status: "open", later: true, num: 15, from: "feedback", created: "2026-10-17T16:00:00Z",
+      title: "Charge for sync between devices, after version 2?", short: "Paid sync",
+      body: ["Two testers asked for it. Nothing waits on this until version 2."],
+      recommendation: "Decide after the beta, with the testers' numbers.", choices: ["Yes", "No", "Decide later"] },
+    { id: "q11", kind: "decision", status: "archived", num: 11, from: "builder", created: "2026-10-17T10:00:00Z",
+      title: "Use the new app icon?", choices: ["Yes", "No"],
+      answer: { choice: "Yes", note: "", at: "2026-10-17T11:00:00Z" },
+      outcome: "The builder switched to the new icon; it's in build 1.2.", archived: "2026-10-17T12:30:00Z" },
+    { id: "t-signin", kind: "task", status: "archived", num: 10, from: "checker", created: "2026-10-17T09:00:00Z",
+      title: "Sign in to the test account on the second phone",
+      steps: ["Open Settings on the second phone.", "Sign in with the test account."], stepsDone: [0, 1],
+      answer: { choice: "Done", note: "", at: "2026-10-17T09:40:00Z" },
+      outcome: "Both test phones now sync; the checker passed the sync test.", archived: "2026-10-17T10:15:00Z" }
+  ];
+
+  const S = { items: [], loaded: false, tab: null, pick: {}, notes: {}, editing: {}, busy: {}, db: null, comments: null,
+              canClaude: null, problem: null, askOpen: {}, askDraft: {}, demo: false };
+  const $ = (s) => document.querySelector(s);
+  const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const fmt = (iso) => { if (!iso) return ""; const d = new Date(iso); if (isNaN(d)) return ""; return d.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); };
+  function store(k, v){ try { localStorage.setItem(k, v); } catch(e){} }
+  function load(k){ try { return localStorage.getItem(k); } catch(e){ return null; } }
+  const find = (id) => S.items.find(x => x.id === id);
+
+  $("#lede").textContent = `Questions only you can decide and tasks only you can do. Answer or tick them here whenever you have time; ${AGENT} picks up your answers, acts on them, and moves finished items to the Archive.`;
+
+  const isArchived = (it) => it.status === "archived";
+  const isLater = (it) => !!it.later && !isArchived(it);
+  const isActive = (it) => !isArchived(it) && !it.later;
+  const byTime = (a, b) => String(a.created || "").localeCompare(String(b.created || ""));
+  function statusOf(it){
+    if (it.status === "archived") return { cls: "ok", text: "Done", short: "Done" };
+    if (it.status === "answered") return it.kind === "task"
+      ? { cls: "wait", text: `Done by you · ${AGENT} checking`, short: "Done by you" }
+      : { cls: "wait", text: `Answered · ${AGENT} acting`, short: "Answered" };
+    if (it.later) return { cls: "later", text: "For later", short: "For later" };
+    return { cls: "needs", text: "Needs you", short: "Needs you" };
+  }
+  function groups(){
+    const active = S.items.filter(isActive).sort((a, b) => {
+      const ra = a.status === "answered" ? 1 : 0, rb = b.status === "answered" ? 1 : 0;
+      return ra - rb || (a.priority || 5) - (b.priority || 5) || byTime(a, b);
+    });
+    const later = S.items.filter(isLater).sort(byTime);
+    const archived = S.items.filter(isArchived).sort((a, b) => String(b.archived || "").localeCompare(String(a.archived || "")));
+    return { active, later, archived };
+  }
+  const label = (it) => (it.num ? it.num + " · " : "") + (it.short || it.title);
+  const openAsks = (it) => (it.asks || []).filter(a => !a.a).length;
+
+  function renderTabs(g){
+    const t = [];
+    const tab = (id, text, dot, extra) => `<button class="tab" role="tab" aria-selected="${S.tab === id}" data-tab="${esc(id)}">${dot ? `<span class="dot ${dot}"></span>` : ""}<span class="t">${esc(text)}</span>${extra || ""}</button>`;
+    t.push(tab("overview", "Overview", "", ""));
+    const undecided = g.active.filter(it => it.status !== "answered");
+    const decided = g.active.filter(it => it.status === "answered");
+    undecided.forEach(it => t.push(tab(it.id, label(it), statusOf(it).cls)));
+    if (decided.length){
+      t.push(`<span class="tab-sep" aria-hidden="true"></span><span class="rail-label">Decided</span>`);
+      decided.forEach(it => t.push(tab(it.id, label(it), statusOf(it).cls)));
+    }
+    t.push(`<span class="tab-sep" aria-hidden="true"></span>`);
+    t.push(tab("later", "Later", "later", `<span class="count">${g.later.length}</span>`));
+    t.push(tab("archive", "Archive", "ok", `<span class="count">${g.archived.length}</span>`));
+    $("#tabs").innerHTML = t.join("");
+    const sel = $("#tabs .tab[aria-selected='true']");
+    if (sel && sel.scrollIntoView) sel.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
+
+  function bodyHtml(it){
+    const parts = [];
+    (it.body || []).forEach(p => parts.push(`<p>${esc(p)}</p>`));
+    if (it.bullets && it.bullets.length) parts.push(`<ul>${it.bullets.map(b => `<li>${esc(b)}</li>`).join("")}</ul>`);
+    return parts.length ? `<div class="body">${parts.join("")}</div>` : "";
+  }
+  function copyHtml(it){
+    return (it.copies || []).map((c, i) => {
+      const id = `cp-${it.id}-${i}`;
+      return `<div class="copybox"><div class="head"><span>${esc(c.label)}</span><button class="ghost" data-act="copy" data-target="${id}">Copy</button></div><pre id="${id}">${esc(c.text)}</pre></div>`;
+    }).join("");
+  }
+  function linksHtml(it){
+    if (!it.links || !it.links.length) return "";
+    return `<div class="links"><span class="sec-label">Files and links</span>${it.links.map(l => `<div><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>${l.note ? ` <span class="note">· ${esc(l.note)}</span>` : ""}</div>`).join("")}</div>`;
+  }
+  function stepsHtml(it, readOnly){
+    if (!it.steps || !it.steps.length) return "";
+    const done = new Set(it.stepsDone || []);
+    return `<div><span class="sec-label">Steps</span><ol class="steps">${it.steps.map((s, i) => {
+      const id = `st-${it.id}-${i}`;
+      return `<li class="${done.has(i) ? "done" : ""}"><input type="checkbox" id="${id}" data-act="step" data-id="${esc(it.id)}" data-i="${i}" ${done.has(i) ? "checked" : ""} ${readOnly ? "disabled" : ""}><label for="${id}">${esc(s)}</label></li>`;
+    }).join("")}</ol></div>`;
+  }
+  function answerBlock(it){
+    const a = it.answer;
+    if (!a) return "";
+    return `<div class="answer"><span class="sec-label">Your answer${a.at ? " · " + esc(fmt(a.at)) : ""}</span><b>${esc(a.choice)}</b>${a.note ? ` — ${esc(a.note)}` : ""}</div>`;
+  }
+  function reachHint(){
+    if (S.demo) return "Example only: nothing is sent.";
+    return S.canClaude === "available" ? `${Agent} is told the moment you answer.` : `Saved here; ${AGENT} reads it at its next check.`;
+  }
+  function controls(it){
+    if (isArchived(it)) return "";
+    const answered = it.status === "answered" && !S.editing[it.id];
+    if (answered) return `<div class="row"><button class="ghost" data-act="edit" data-id="${esc(it.id)}">Change my answer</button><span class="hint">${esc(reachHint())}</span></div>`;
+    const busy = !!S.busy[it.id];
+    const noteVal = S.notes[it.id] != null ? S.notes[it.id] : (it.answer && it.answer.note) || "";
+    const ta = `<textarea id="note-${esc(it.id)}" data-act="note" data-id="${esc(it.id)}" maxlength="2000" placeholder="${it.kind === "task" ? `Anything ${esc(AGENT)} should know (optional)` : "Your own words, if you want to add or change something (optional)"}">${esc(noteVal)}</textarea>`;
+    if (it.kind === "task"){
+      return `${ta}<div class="row"><button class="primary" data-act="done" data-id="${esc(it.id)}" ${busy ? "disabled" : ""}>Mark as done</button><span class="hint">Tick the steps as you go; they're saved too.</span></div>`;
+    }
+    const choices = it.choices && it.choices.length ? it.choices : ["Yes", "No"];
+    const pick = S.pick[it.id] != null ? S.pick[it.id] : (it.answer && it.answer.choice) || null;
+    return `<div class="choices" role="group" aria-label="Your answer">${choices.map(c => `<button class="choice" data-act="choose" data-id="${esc(it.id)}" data-choice="${esc(c)}" aria-pressed="${pick === c}">${esc(c)}</button>`).join("")}</div>${ta}<div class="row"><button class="primary" data-act="send" data-id="${esc(it.id)}" ${(!pick || busy) ? "disabled" : ""}>Send answer</button><span class="hint">${pick ? esc(reachHint()) : "Pick one first."}</span></div>`;
+  }
+  function asksHtml(it){
+    const list = it.asks || [];
+    if (!list.length) return "";
+    return `<div class="asks"><span class="sec-label">Your questions</span>${list.map(a => `<div class="ask"><div class="q">${esc(a.q)}</div><div class="note">${esc(fmt(a.at))}</div>${a.a ? `<div class="a"><span class="sec-label">${esc(Agent)}${a.aAt ? " · " + esc(fmt(a.aAt)) : ""}</span>${esc(a.a)}</div>` : `<div class="pending">Waiting for ${esc(AGENT)}'s answer.</div>`}</div>`).join("")}</div>`;
+  }
+  function askBox(it){
+    if (isArchived(it)) return "";
+    if (!S.askOpen[it.id]) return `<div class="row"><button class="ghost" data-act="ask-toggle" data-id="${esc(it.id)}">Ask a question about this</button></div>`;
+    const busy = !!S.busy["ask-" + it.id];
+    return `<div class="askbox"><label class="sec-label" for="ask-${esc(it.id)}">Your question for ${esc(AGENT)}</label><textarea id="ask-${esc(it.id)}" data-act="askdraft" data-id="${esc(it.id)}" maxlength="2000" placeholder="For example: what happens if I say no?">${esc(S.askDraft[it.id] || "")}</textarea><div class="row"><button class="primary" data-act="ask-send" data-id="${esc(it.id)}" ${busy ? "disabled" : ""}>Send question</button><button class="ghost" data-act="ask-toggle" data-id="${esc(it.id)}">Cancel</button><span class="hint">${esc(reachHint())}</span></div></div>`;
+  }
+  function slip(it){
+    const st = statusOf(it);
+    const readOnly = isArchived(it);
+    return `<article class="slip ${it.status === "answered" ? "answered" : ""}" data-item="${esc(it.id)}" aria-labelledby="h-${esc(it.id)}">
+      <div class="meta">${it.num ? `<span class="num">№ ${esc(it.num)}</span>` : ""}<span class="kind">${it.kind === "task" ? "Task for you" : "Decision"}</span><span class="pill ${st.cls}"><span class="dot ${st.cls}"></span>${esc(st.text)}</span><span>${it.from ? "from " + esc(it.from) + " · " : ""}${esc(fmt(it.created))}</span></div>
+      <h2 id="h-${esc(it.id)}">${esc(it.title)}</h2>
+      ${bodyHtml(it)}
+      ${it.recommendation ? `<div class="rec"><span class="label">Recommended</span>${esc(it.recommendation)}</div>` : ""}
+      ${stepsHtml(it, readOnly)}
+      ${copyHtml(it)}
+      ${linksHtml(it)}
+      ${answerBlock(it)}
+      ${it.outcome ? `<div class="outcome"><span class="sec-label">What happened${it.archived ? " · " + esc(fmt(it.archived)) : ""}</span>${esc(it.outcome)}</div>` : ""}
+      ${controls(it)}
+      ${asksHtml(it)}
+      ${askBox(it)}
+    </article>`;
+  }
+  function overview(g){
+    const und = g.active.filter(i => i.status !== "answered"), dec = g.active.filter(i => i.status === "answered");
+    const tiles = `<div class="tiles"><div class="tile needs"><div class="n">${und.length}</div><div class="l">Need you</div></div><div class="tile wait"><div class="n">${dec.length}</div><div class="l">With ${esc(AGENT)}</div></div><div class="tile"><div class="n">${g.later.length}</div><div class="l">For later</div></div><div class="tile"><div class="n">${g.archived.length}</div><div class="l">Archived</div></div></div>`;
+    const row = (it) => { const st = statusOf(it); const q = openAsks(it); return `<button class="ov-row" data-tab="${esc(it.id)}"><span class="dot ${st.cls}"></span><span class="t">${it.num ? `<span class="num">№ ${esc(it.num)}</span> · ` : ""}${esc(it.title)}</span>${q ? `<span class="qchip">question asked</span>` : `<span class="pill ${st.cls}">${esc(st.short)}</span>`}</button>`; };
+    const list = (und.length ? `<div class="slip overview"><span class="sec-label">Needs you</span><div class="list">${und.map(row).join("")}</div></div>` : `<div class="calm">Nothing needs you.</div>`)
+      + (dec.length ? `<div class="divider"><span>Decided · ${esc(AGENT)} is acting on these</span></div><div class="slip overview decided"><div class="list">${dec.map(row).join("")}</div></div>` : "");
+    const asked = g.later.filter(i => openAsks(i));
+    const askedList = asked.length ? `<div class="slip overview"><span class="sec-label">Questions you asked on later items</span><div class="list">${asked.map(row).join("")}</div></div>` : "";
+    return tiles + list + askedList + `<p class="reach">${esc(reachHint())}</p>`;
+  }
+  function render(){
+    const main = $("#main");
+    if (S.problem){
+      $("#tabs").innerHTML = "";
+      main.innerHTML = `<div class="slip"><h2>This page can't reach its items here</h2><p class="note" style="margin:0">${esc(S.problem)}</p></div>`;
+      return;
+    }
+    if (!S.loaded){ $("#tabs").innerHTML = ""; return; }
+    const g = groups();
+    const ids = new Set(S.items.map(i => i.id));
+    if (!S.tab || (!["overview", "later", "archive"].includes(S.tab) && !ids.has(S.tab))) S.tab = "overview";
+    renderTabs(g);
+    let html = "";
+    if (S.tab === "overview") html = overview(g);
+    else if (S.tab === "later"){
+      const und = g.later.filter(i => i.status !== "answered"), dec = g.later.filter(i => i.status === "answered");
+      html = g.later.length
+        ? `<p class="note" style="margin:0">Parked until you have time. Nothing waits on these yet; answer whenever you like.</p>`
+          + und.map(slip).join("")
+          + (dec.length ? `<div class="divider"><span>Decided · kept here until it's time</span></div>` + dec.map(slip).join("") : "")
+        : `<div class="calm">Nothing parked for later.</div>`;
+    }
+    else if (S.tab === "archive") html = g.archived.length ? g.archived.map(it => `<details class="arch"><summary><span class="dot ok"></span><span class="t">${it.num ? `<span class="num">№ ${esc(it.num)}</span> · ` : ""}${esc(it.title)}</span><span class="note">${esc(fmt(it.archived))}</span></summary>${slip(it)}</details>`).join("") : `<p class="note">Finished items will appear here.</p>`;
+    else { const it = find(S.tab); html = it ? slip(it) : ""; }
+    main.innerHTML = html;
+  }
+
+  let toastTimer = null;
+  function toast(msg){ const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3000); }
+  function refreshReach(){
+    const c = S.comments;
+    if (!c || !c.canSendToClaude){ S.canClaude = "off"; return; }
+    c.canSendToClaude().then(v => { if (v !== S.canClaude){ S.canClaude = v; render(); } }, () => { S.canClaude = "off"; });
+  }
+  function setTab(id){ S.tab = id; store("desk.tab", id); try { history.replaceState(null, "", "#" + id); } catch(e){} refreshReach(); render(); window.scrollTo({ top: 0 }); }
+
+  // Tell the agent at once, as a comment sent to Claude, in the item's own thread.
+  // Call it straight from the click: the platform only sends from the viewer's own recent gesture.
+  function notify(it, text){
+    const c = S.comments;
+    if (S.demo || !c || !c.sendToClaude || S.canClaude !== "available") return Promise.resolve(false);
+    const full = `${it.num ? "№ " + it.num + " · " : ""}${it.title}\n\n${text}`.slice(0, 3900);
+    const el = document.querySelector(`article[data-item="${CSS.escape(it.id)}"]`);
+    const anchorP = el ? c.anchorFor(el).catch(() => null) : Promise.resolve(null);
+    return (async () => {
+      try {
+        if (it.thread){
+          try { await c.sendToClaude({ threadId: it.thread, text: full }); return true; }
+          catch(e){ if (!e || e.code !== "not_found") throw e; }
+        }
+        const anchor = await anchorP;
+        if (!anchor) return false;
+        const r = await c.sendToClaude({ anchor, text: full });
+        if (r && r.threadId && S.db){ try { await S.db.doc("items/" + it.id).update({ thread: r.threadId }); } catch(e){} }
+        return true;
+      } catch(e){
+        if (e && (e.code === "forbidden" || e.code === "claude_unavailable")) refreshReach();
+        return false;
+      }
+    })();
+  }
+
+  async function save(it, data){
+    if (S.demo){ Object.assign(it, data); return true; }
+    await S.db.doc("items/" + it.id).update(data);
+    return true;
+  }
+  async function answer(it, data, message, okWord){
+    if (!it || S.busy[it.id] || (!S.db && !S.demo)) return;
+    const told = notify(it, message);
+    S.busy[it.id] = true; render();
+    let saved = false;
+    try { saved = await save(it, data); S.editing[it.id] = false; delete S.pick[it.id]; delete S.notes[it.id]; }
+    catch(e){ toast(e && e.code === "invalid_argument" ? "Couldn't save: this view can't write here." : "Couldn't save. Check the connection and try again."); }
+    finally { S.busy[it.id] = false; render(); }
+    const woke = await told;
+    if (saved) toast(S.demo ? "Example only: nothing was sent." : woke ? `${okWord} ${Agent} has been told.` : `${okWord} ${Agent} sees it at its next check.`);
+  }
+  async function sendAsk(id){
+    const it = find(id);
+    const text = (S.askDraft[id] || "").trim();
+    if (!text){ toast("Type your question first."); return; }
+    if (!it || S.busy["ask-" + id]) return;
+    const told = notify(it, "Question: " + text);
+    S.busy["ask-" + id] = true;
+    try {
+      const asks = (it.asks || []).map(a => Object.assign({}, a));
+      asks.push({ q: text, at: new Date().toISOString(), via: S.demo ? "demo" : "desk" });
+      await save(it, { asks });
+      S.askOpen[id] = false; S.askDraft[id] = "";
+      const woke = await told;
+      toast(S.demo ? "Example only: nothing was sent." : woke ? `Sent. ${Agent} will answer here.` : `Saved. ${Agent} answers at its next check.`);
+    } catch(e){ toast("Couldn't save the question. Try again."); }
+    finally { S.busy["ask-" + id] = false; render(); }
+  }
+
+  document.addEventListener("click", (ev) => {
+    const el = ev.target.closest("[data-tab],[data-act]");
+    if (!el) return;
+    if (el.dataset.tab){ setTab(el.dataset.tab); return; }
+    const act = el.dataset.act, id = el.dataset.id, it = id ? find(id) : null;
+    if (act === "ask-toggle"){
+      S.askOpen[id] = !S.askOpen[id];
+      if (S.askOpen[id]) refreshReach();
+      render();
+      if (S.askOpen[id]){ const ta = document.getElementById("ask-" + id); if (ta) ta.focus(); }
+    }
+    else if (act === "ask-send") sendAsk(id);
+    else if (act === "choose"){ S.pick[id] = el.dataset.choice; render(); }
+    else if (act === "edit"){ S.editing[id] = true; refreshReach(); render(); }
+    else if (act === "send"){
+      const pick = S.pick[id]; if (!pick || !it) return;
+      const note = (S.notes[id] != null ? S.notes[id] : "").trim();
+      const changed = !!it.answer;
+      answer(it, { status: "answered", answer: { choice: pick, note, at: new Date().toISOString() } },
+        `${changed ? "Changed answer" : "Answer"}: ${pick}${note ? "\nNote: " + note : ""}`, "Sent.");
+    }
+    else if (act === "done"){
+      if (!it) return;
+      const note = (S.notes[id] != null ? S.notes[id] : "").trim();
+      answer(it, { status: "answered", answer: { choice: "Done", note, at: new Date().toISOString() } },
+        `Done${note ? "\nNote: " + note : ""}`, "Marked as done.");
+    }
+    else if (act === "copy"){
+      const pre = document.getElementById(el.dataset.target); if (!pre) return;
+      const fallback = () => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); toast("Selected. Copy it with ⌘C or Ctrl+C."); };
+      try { navigator.clipboard.writeText(pre.textContent).then(() => toast("Copied."), fallback); } catch(e){ fallback(); }
+    }
+  });
+  document.addEventListener("input", (ev) => {
+    const el = ev.target; if (!el.dataset) return;
+    if (el.dataset.act === "note") S.notes[el.dataset.id] = el.value;
+    if (el.dataset.act === "askdraft") S.askDraft[el.dataset.id] = el.value;
+  });
+  document.addEventListener("change", async (ev) => {
+    const el = ev.target;
+    if (!(el.dataset && el.dataset.act === "step")) return;
+    const it = find(el.dataset.id); if (!it) return;
+    const i = Number(el.dataset.i);
+    const set = new Set(it.stepsDone || []); if (el.checked) set.add(i); else set.delete(i);
+    try { await save(it, { stepsDone: [...set].sort((a, b) => a - b) }); if (S.demo) render(); }
+    catch(e){ toast("Couldn't save that tick."); el.checked = !el.checked; }
+  });
+
+  const fromHash = (location.hash || "").slice(1);
+  S.tab = fromHash || load("desk.tab") || "overview";
+
+  function startDemo(){
+    S.demo = true; S.items = DEMO.map(x => JSON.parse(JSON.stringify(x))); S.loaded = true;
+    $("#demo-banner").hidden = false; render();
+  }
+  async function boot(){
+    if (!window.claude || !window.claude.use){ startDemo(); return; }
+    let db = null;
+    try { db = await window.claude.use("db"); } catch(e){ db = null; }
+    if (!db){ S.problem = "Open it from Claude while signed in, and it will show your questions and tasks."; render(); return; }
+    S.db = db;
+    try { S.comments = await window.claude.use("comments"); } catch(e){ S.comments = null; }
+    refreshReach();
+    db.collection("items").onSnapshot((snap) => {
+      S.items = snap.docs.map(d => Object.assign({ id: d.id }, d.data()));
+      S.loaded = true; render();
+    }, (err) => { S.problem = "The list stopped updating (" + (err && err.code || "unknown") + "). Reload the page."; render(); });
+  }
+  boot();
+})();
+</script>
