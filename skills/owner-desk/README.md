@@ -8,7 +8,7 @@ whenever you have time.
 > `comments` capabilities), on claude.ai or in the Claude desktop app. It
 > doesn't work in plain terminal Claude Code.
 
-![The board's overview: two items need you, one is answered, one is parked for later](screenshots/overview-light.png)
+![The board's overview: one urgent item at the top, two that need you, one answered, one parked for later](screenshots/overview-light.png)
 
 ## The problem
 
@@ -47,6 +47,19 @@ not when you have time.
 <p>
   <img src="screenshots/decision-phone-light.png" alt="A decision on a phone: the question, the recommended answer, Yes and Next week buttons, and an earlier question answered" width="300">
   <img src="screenshots/task-phone-dark.png" alt="A task on a phone in dark mode: steps with one ticked, text to copy, a guide to open, and Mark as done" width="300">
+</p>
+
+### On an iPad
+
+A sample desk for a made-up plant care app. On the desk, you swipe left or right to move between tabs.
+
+<p>
+  <img src="screenshots/ipad-status.png" alt="The Status tab on an iPad: one line on where the project stands, buttons to the one urgent item and the three that need you, and a table of four sessions with their state, what each is doing, and whether to restart it" width="420">
+  <img src="screenshots/ipad-roadmap.png" alt="The Roadmap tab on an iPad: a track of four stages, the current stage with what's now and what's next, and a timeline with the current stage open and its items ticked off" width="420">
+</p>
+<p>
+  <img src="screenshots/ipad-task.png" alt="A task on an iPad: two of three steps ticked, text to copy, a guide to open, and a question for the chief of staff being written" width="420">
+  <img src="screenshots/ipad-decided.png" alt="The Decided tab on an iPad: a decision with the owner's saved answer, and buttons to change it" width="420">
 </p>
 
 The items in these pictures are made up. Opened in a plain browser, the

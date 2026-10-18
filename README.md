@@ -65,7 +65,14 @@ much less usage on context nobody needs, the work is checked before it
 counts, and I can add a session for any new job without explaining
 everything again.
 
-![The owner desk's overview: two items need you, one is answered, one is parked for later](skills/owner-desk/screenshots/overview-light.png)
+![The owner desk's overview: one urgent item at the top, two that need you, one answered, one parked for later](skills/owner-desk/screenshots/overview-light.png)
+
+On an iPad, the desk's Status and Roadmap tabs (a sample project):
+
+<p>
+  <img src="skills/owner-desk/screenshots/ipad-status.png" alt="The Status tab on an iPad: one line on where the project stands, buttons to the one urgent item and the three that need you, and a table of four sessions with their state, what each is doing, and whether to restart it" width="420">
+  <img src="skills/owner-desk/screenshots/ipad-roadmap.png" alt="The Roadmap tab on an iPad: a track of four stages, the current stage with what's now and what's next, and a timeline with the current stage open and its items ticked off" width="420">
+</p>
 
 ## Install
 

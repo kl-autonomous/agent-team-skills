@@ -124,6 +124,13 @@ svg .small{font-size:10px;fill:var(--muted)}
 .sent{font-size:13.5px;color:var(--done)}
 .example{font-size:13px;color:var(--muted)}
 
+/* the desk on an iPad: real screenshots of a sample desk */
+.shots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 20px}
+.shot{margin:0;display:flex;flex-direction:column;gap:8px;min-width:0}
+.shot img{display:block;width:100%;height:auto;max-width:100%;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.shot figcaption{font-size:15.5px;color:var(--muted);max-width:52ch}
+.shot figcaption b{color:var(--ink)}
+
 /* one or both */
 .modes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 24px}
 .mode{border-top:3px solid var(--line);padding-top:12px;display:flex;flex-direction:column;gap:6px;min-width:0}
@@ -152,7 +159,7 @@ section{display:flex;flex-direction:column;gap:22px}
 .sec-head{display:flex;flex-direction:column;gap:8px}
 
 @media (max-width:760px){
-  .compare,.skills,.two{grid-template-columns:minmax(0,1fr)}
+  .compare,.skills,.two,.shots{grid-template-columns:minmax(0,1fr)}
   .modes{grid-template-columns:minmax(0,1fr)}
   .change{grid-template-columns:minmax(0,1fr);gap:8px}
   .figs{grid-template-columns:minmax(0,1fr)}
@@ -355,6 +362,19 @@ section{display:flex;flex-direction:column;gap:22px}
         </div>
         <p class="example">An example item, with made-up content. The buttons work on this page only.</p>
       </article>
+    </div>
+  </section>
+
+  <section aria-labelledby="ipad">
+    <div class="sec-head read">
+      <h2 id="ipad">The desk on an iPad</h2>
+      <p class="lede">Screenshots of a sample desk, for a made-up plant care app. On the desk, you swipe left or right to move between tabs.</p>
+    </div>
+    <div class="shots">
+      <figure class="shot"><img src="img/ipad-status.png" width="1280" height="1214" loading="lazy" alt="The Status tab on an iPad: one line on where the project stands, buttons to the one urgent item and the three that need you, and a table of four sessions with their state, what each is doing, and whether to restart it"><figcaption><b>Status.</b> Every session's state, what it's doing, and whether it's time to restart it.</figcaption></figure>
+      <figure class="shot"><img src="img/ipad-roadmap.png" width="1280" height="1214" loading="lazy" alt="The Roadmap tab on an iPad: a track of four stages, the current stage with what's now and what's next, and a timeline with the current stage open and its items ticked off"><figcaption><b>Roadmap.</b> The plan stage by stage, with the current stage and its next step on top.</figcaption></figure>
+      <figure class="shot"><img src="img/ipad-task.png" width="1280" height="1214" loading="lazy" alt="A task on an iPad: two of three steps ticked, text to copy, a guide to open, and a question for the chief of staff being written"><figcaption><b>A task for you.</b> Steps to tick, text to copy, and a question for the chief of staff.</figcaption></figure>
+      <figure class="shot"><img src="img/ipad-decided.png" width="1280" height="1214" loading="lazy" alt="The Decided tab on an iPad: a decision with the owner's saved answer, and buttons to change it"><figcaption><b>Decided.</b> Your answer is saved, and you can change it until the chief of staff acts on it.</figcaption></figure>
     </div>
   </section>
 
