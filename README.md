@@ -3,6 +3,8 @@
 Two Claude Code skills for running a team of Claude sessions without
 reading every chat.
 
+**[See how they change your workflow →](https://kl-autonomous.github.io/agent-team-skills/)**
+
 > **What they need:** the Claude desktop app (Code tab), where sessions can
 > see and message each other. owner-desk also needs Claude artifacts with a
 > database (claude.ai or the desktop app). Neither works in plain terminal
