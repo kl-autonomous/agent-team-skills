@@ -139,6 +139,9 @@ svg .small{font-size:10px;fill:var(--muted)}
 
 /* where it comes from */
 .origin{display:flex;flex-direction:column;gap:18px}
+.why{border-left:3px solid var(--accent);padding-left:18px;display:flex;flex-direction:column;gap:12px;max-width:66ch}
+.why p{font-size:17px}
+.why .by{font-family:var(--font-mono);font-size:13px;color:var(--muted)}
 .figs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .fig{display:flex;flex-direction:column;gap:2px;border-left:2px solid var(--line);padding-left:14px}
 .fig .n{font-family:var(--font-display);font-weight:700;font-size:40px;line-height:1.05;font-variant-numeric:tabular-nums}
@@ -390,6 +393,13 @@ section{display:flex;flex-direction:column;gap:22px}
       <h2 id="origin">Where it comes from</h2>
       <p class="lede">All four came out of a real project: an iPhone app built by a team of Claude sessions, taken from its first decision to a beta with testers in 9 days. The owner wrote no app code and made every decision.</p>
     </div>
+    <blockquote class="why" style="margin:0">
+      <span class="label">Why I built this</span>
+      <p>I wanted to build an iPhone app without it being limited by what I know. I'm not a Swift developer, and I didn't want to learn how to structure a Swift project before I could start. So I let Claude write all of the code, and I kept every decision for myself.</p>
+      <p>That worked, but problems came quickly. The biggest one was context. The longer a session ran, the faster it burned through my usage, and most of what it carried wasn't needed. But if I started a fresh session, I had to explain everything again.</p>
+      <p>Having a chief of staff also made the whole setup modular. When I need something new done, I add a session for that one job and connect it to the chief of staff, without explaining the project to it. Once the app was in beta, I added a session that reads the testers' feedback, and a tester that drives the iPhone Simulator and tries edge cases I'd never have thought of.</p>
+      <span class="by">kl-autonomous</span>
+    </blockquote>
     <div class="figs">
       <div class="fig"><span class="n">12</span><span class="l">blocking problems the reviewer caught before anything merged</span></div>
       <div class="fig"><span class="n">12</span><span class="l">restarts, with nothing lost</span></div>

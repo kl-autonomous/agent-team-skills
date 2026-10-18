@@ -21,6 +21,50 @@ They stack: every session is restart-ready; a builder and a reviewer form
 the loop; a chief of staff runs the team for you; and the desk holds what
 waits for you.
 
+## Why I built this
+
+I wanted to build an iPhone app without it being limited by what I know.
+I'm not a Swift developer, and I didn't want to learn how to structure a
+Swift project before I could start. So I let Claude write all of the code,
+and I kept every decision for myself.
+
+That worked, but problems came quickly. The biggest one was context. The
+longer a session ran, the faster it burned through my usage, and most of
+what it carried wasn't needed: a session building one feature doesn't need
+the whole history of the project. But if I started a fresh session, I had
+to explain everything again.
+
+So I split the work up:
+
+- **restart-ready** keeps the project's memory in a few short files instead
+  of in the chat. A session can be restarted whenever its context gets big,
+  and the new one picks up from the files. Nothing has to be explained
+  twice.
+- **build-review-loop** lets the builder focus on one feature at a time,
+  and adds a reviewer that checks the work on its own. It runs the tests
+  itself and makes sure they actually catch bugs. An AI that checks its own
+  work tends to believe its own claims; a second one keeps it honest.
+- **chief-of-staff** is the one session I talk to. It only passes messages
+  and keeps track of the team, so it rarely needs a restart and doesn't
+  need the most expensive model.
+- **owner-desk** is where the chief of staff puts everything that needs my
+  answer, so I can reply from my phone when I have time.
+
+Having a chief of staff also made the whole setup modular. When I need
+something new done, I add a session for that one job and connect it to the
+chief of staff. I don't have to explain the project to it, and it can often
+run on a cheaper model. Once the app was in beta, I added two:
+
+- **A feedback session** reads the testers' notes from App Store Connect,
+  sums them up, and reports to the chief of staff.
+- **A tester session** drives the iPhone Simulator on its own. It tries
+  edge cases I'd never have thought of and reports the bugs it finds.
+
+The result: each session stays small and focused on its own job, I spend
+much less usage on context nobody needs, the work is checked before it
+counts, and I can add a session for any new job without explaining
+everything again.
+
 ![The owner desk's overview: two items need you, one is answered, one is parked for later](skills/owner-desk/screenshots/overview-light.png)
 
 ## Install
