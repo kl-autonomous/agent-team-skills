@@ -19,20 +19,24 @@ not when you have time.
 
 ## How the desk works
 
-- **One tab per item.** A *decision* has a recommended answer and buttons.
+- **A Needs you tab, and one tab per item.** *Needs you* shows everything
+  waiting for you, one after another; each item also has its own tab. A
+  *decision* has a recommended answer and buttons.
   A *task* (an upload, a sign-in) has steps to tick, text to copy, and the
   guide attached.
 - **You answer whenever you like.** Your answer is saved and also sent to
   the agent as a short comment, which wakes it straight away. The page tells
   you which applies: "…is told the moment you answer", or "Saved here; …
   reads it at its next check".
-- **Answered items move apart.** They sit under *Decided* while the agent
-  acts on them, so what still needs you stands out.
+- **Answered items move apart.** They go to the *Decided* tab while the
+  agent acts on them, so what still needs you stands out.
 - **The agent archives what's done,** with one line on what happened. The
   Archive is the record of every decision.
 - **Later** holds questions that can wait.
 - **Ask about any item** ("what happens if I say no?"), and the answer
   shows on the same tab.
+- **Swipe left or right** to move between tabs, handy on an iPad or a
+  phone.
 
 <p>
   <img src="screenshots/decision-phone-light.png" alt="A decision on a phone: the question, the recommended answer, Yes and Next week buttons, and an earlier question answered" width="300">

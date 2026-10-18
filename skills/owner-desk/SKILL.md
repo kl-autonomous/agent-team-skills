@@ -5,7 +5,7 @@ description: Give the human owner a live board, a Claude artifact with its own s
 
 # Owner desk
 
-Questions in chat get buried, and the owner has to answer when the agent asks, not when they have time. The desk moves them out of the chat into a board: one tab per item, open items apart from answered ones, a Later tab for what can wait, and an Archive for what's done. The owner answers there; you read the answers, act, and archive.
+Questions in chat get buried, and the owner has to answer when the agent asks, not when they have time. The desk moves them out of the chat into a board: a Needs you tab with every open item (each also gets a tab of its own), a Decided tab for answered ones, a Later tab for what can wait, and an Archive for what's done. On a phone or iPad, the owner swipes sideways to move between tabs. The owner answers there; you read the answers, act, and archive.
 
 ## What this needs
 

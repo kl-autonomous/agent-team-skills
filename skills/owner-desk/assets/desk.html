@@ -4,7 +4,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: a desk. A sticky rail of tabs (one per open item) above one open slip at a time. */
+/* Layout: a desk. A sticky rail of tabs (the groups, plus one per item that needs you) above one open slip at a time. Swipe sideways to change tabs. */
 :root{
   --bg:#F4F3F1; --surface:#FFFFFF; --ink:#1B1C20; --muted:#63646C; --line:#E0DED9;
   --accent:#B8324A; --accent-soft:#F7E2E6; --on-accent:#FFFFFF;
@@ -48,7 +48,6 @@ h1{font-size:26px;line-height:1.2;margin:0;font-weight:700;text-wrap:balance}
 .tab[aria-selected="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
 .tab:focus-visible,button:focus-visible,textarea:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 .tab-sep{flex:0 0 1px;align-self:stretch;background:var(--line);margin:3px 4px}
-.rail-label{flex:0 0 auto;align-self:center;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding-right:2px}
 .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px;background:var(--muted)}
 .dot.needs{background:var(--accent)} .dot.wait{background:var(--wait)} .dot.ok{background:var(--ok)} .dot.later{background:var(--later)}
 .count{font-family:var(--font-mono);font-size:12px;color:var(--muted)}
@@ -105,12 +104,14 @@ ol.steps li.done label{color:var(--muted);text-decoration:line-through;text-deco
 .ov-row .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .qchip{font-size:11.5px;font-weight:500;padding:1px 8px;border-radius:999px;background:var(--wait-soft);color:var(--wait);white-space:nowrap}
 .tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
-.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;font:inherit;color:inherit;text-align:left;cursor:pointer;min-width:0}
 .tile .n{font-family:var(--font-mono);font-size:22px;font-weight:500;font-variant-numeric:tabular-nums}
 .tile .l{font-size:12.5px;color:var(--muted)}
 .tile.needs .n{color:var(--accent)} .tile.wait .n{color:var(--wait)}
 .calm{background:var(--ok-soft);color:var(--ok);border-radius:var(--r);padding:16px 18px;font-weight:700}
 .reach{font-size:12.5px;color:var(--muted)}
+.swipe-tip{display:none;margin-top:-8px}
+@media (hover: none) and (pointer: coarse){ .swipe-tip{display:block} }
 .divider{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12.5px;margin-top:6px}
 .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line)}
 .divider span{flex:0 1 auto;text-align:center}
@@ -122,7 +123,10 @@ details.arch[open] summary{margin-bottom:10px}
 .note{font-size:13px;color:var(--muted)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:20;max-width:calc(100% - 32px)}
 @media (max-width:520px){ .tiles{grid-template-columns:repeat(2,minmax(0,1fr))} .slip{padding:16px} h1{font-size:22px} }
-@media (prefers-reduced-motion: no-preference){ .slip{animation:rise .18s ease-out} @keyframes rise{from{transform:translateY(4px)}to{transform:none}} }
+@media (prefers-reduced-motion: no-preference){ .slip{animation:rise .18s ease-out} @keyframes rise{from{transform:translateY(4px)}to{transform:none}}
+  main.from-right{animation:from-right .2s ease-out} main.from-left{animation:from-left .2s ease-out}
+  @keyframes from-right{from{transform:translateX(28px);opacity:.3}to{transform:none;opacity:1}}
+  @keyframes from-left{from{transform:translateX(-28px);opacity:.3}to{transform:none;opacity:1}} }
 </style>
 
 <div class="wrap">
@@ -207,27 +211,29 @@ details.arch[open] summary{margin-bottom:10px}
       const ra = a.status === "answered" ? 1 : 0, rb = b.status === "answered" ? 1 : 0;
       return ra - rb || (a.priority || 5) - (b.priority || 5) || byTime(a, b);
     });
+    const needs = active.filter(it => it.status !== "answered");
+    const decided = active.filter(it => it.status === "answered");
     const later = S.items.filter(isLater).sort(byTime);
     const archived = S.items.filter(isArchived).sort((a, b) => String(b.archived || "").localeCompare(String(a.archived || "")));
-    return { active, later, archived };
+    return { active, needs, decided, later, archived };
   }
+  const GROUP_TABS = ["overview", "needs", "decided", "later", "archive"];
+  // The group tab an item lives under, for an item that has no tab of its own.
+  const groupOf = (it) => isArchived(it) ? "archive" : it.later ? "later" : it.status === "answered" ? "decided" : "needs";
   const label = (it) => (it.num ? it.num + " · " : "") + (it.short || it.title);
   const openAsks = (it) => (it.asks || []).filter(a => !a.a).length;
 
   function renderTabs(g){
     const t = [];
     const tab = (id, text, dot, extra) => `<button class="tab" role="tab" aria-selected="${S.tab === id}" data-tab="${esc(id)}">${dot ? `<span class="dot ${dot}"></span>` : ""}<span class="t">${esc(text)}</span>${extra || ""}</button>`;
+    const count = (n) => `<span class="count">${n}</span>`;
     t.push(tab("overview", "Overview", "", ""));
-    const undecided = g.active.filter(it => it.status !== "answered");
-    const decided = g.active.filter(it => it.status === "answered");
-    undecided.forEach(it => t.push(tab(it.id, label(it), statusOf(it).cls)));
-    if (decided.length){
-      t.push(`<span class="tab-sep" aria-hidden="true"></span><span class="rail-label">Decided</span>`);
-      decided.forEach(it => t.push(tab(it.id, label(it), statusOf(it).cls)));
-    }
+    t.push(tab("needs", "Needs you", "needs", count(g.needs.length)));
+    g.needs.forEach(it => t.push(tab(it.id, label(it), statusOf(it).cls)));
     t.push(`<span class="tab-sep" aria-hidden="true"></span>`);
-    t.push(tab("later", "Later", "later", `<span class="count">${g.later.length}</span>`));
-    t.push(tab("archive", "Archive", "ok", `<span class="count">${g.archived.length}</span>`));
+    t.push(tab("decided", "Decided", "wait", count(g.decided.length)));
+    t.push(tab("later", "Later", "later", count(g.later.length)));
+    t.push(tab("archive", "Archive", "ok", count(g.archived.length)));
     $("#tabs").innerHTML = t.join("");
     const sel = $("#tabs .tab[aria-selected='true']");
     if (sel && sel.scrollIntoView) sel.scrollIntoView({ block: "nearest", inline: "nearest" });
@@ -310,14 +316,15 @@ details.arch[open] summary{margin-bottom:10px}
     </article>`;
   }
   function overview(g){
-    const und = g.active.filter(i => i.status !== "answered"), dec = g.active.filter(i => i.status === "answered");
-    const tiles = `<div class="tiles"><div class="tile needs"><div class="n">${und.length}</div><div class="l">Need you</div></div><div class="tile wait"><div class="n">${dec.length}</div><div class="l">With ${esc(AGENT)}</div></div><div class="tile"><div class="n">${g.later.length}</div><div class="l">For later</div></div><div class="tile"><div class="n">${g.archived.length}</div><div class="l">Archived</div></div></div>`;
+    const und = g.needs, dec = g.decided;
+    const tile = (id, cls, n, text) => `<button class="tile ${cls}" data-tab="${id}"><div class="n">${n}</div><div class="l">${text}</div></button>`;
+    const tiles = `<div class="tiles">${tile("needs", "needs", und.length, "Need you")}${tile("decided", "wait", dec.length, "With " + esc(AGENT))}${tile("later", "", g.later.length, "For later")}${tile("archive", "", g.archived.length, "Archived")}</div>`;
     const row = (it) => { const st = statusOf(it); const q = openAsks(it); return `<button class="ov-row" data-tab="${esc(it.id)}"><span class="dot ${st.cls}"></span><span class="t">${it.num ? `<span class="num">№ ${esc(it.num)}</span> · ` : ""}${esc(it.title)}</span>${q ? `<span class="qchip">question asked</span>` : `<span class="pill ${st.cls}">${esc(st.short)}</span>`}</button>`; };
     const list = (und.length ? `<div class="slip overview"><span class="sec-label">Needs you</span><div class="list">${und.map(row).join("")}</div></div>` : `<div class="calm">Nothing needs you.</div>`)
       + (dec.length ? `<div class="divider"><span>Decided · ${esc(AGENT)} is acting on these</span></div><div class="slip overview decided"><div class="list">${dec.map(row).join("")}</div></div>` : "");
     const asked = g.later.filter(i => openAsks(i));
     const askedList = asked.length ? `<div class="slip overview"><span class="sec-label">Questions you asked on later items</span><div class="list">${asked.map(row).join("")}</div></div>` : "";
-    return tiles + list + askedList + `<p class="reach">${esc(reachHint())}</p>`;
+    return tiles + list + askedList + `<p class="reach">${esc(reachHint())}</p><p class="reach swipe-tip">Swipe left or right to move between tabs.</p>`;
   }
   function render(){
     const main = $("#main");
@@ -329,10 +336,20 @@ details.arch[open] summary{margin-bottom:10px}
     if (!S.loaded){ $("#tabs").innerHTML = ""; return; }
     const g = groups();
     const ids = new Set(S.items.map(i => i.id));
-    if (!S.tab || (!["overview", "later", "archive"].includes(S.tab) && !ids.has(S.tab))) S.tab = "overview";
+    if (!S.tab || (!GROUP_TABS.includes(S.tab) && !ids.has(S.tab))) S.tab = "overview";
     renderTabs(g);
     let html = "";
     if (S.tab === "overview") html = overview(g);
+    else if (S.tab === "needs"){
+      html = g.needs.length
+        ? `<p class="note" style="margin:0">Everything waiting for you, one after another. Answer in any order; each one moves to Decided when you do.</p>` + g.needs.map(slip).join("")
+        : `<div class="calm">Nothing needs you.</div>`;
+    }
+    else if (S.tab === "decided"){
+      html = g.decided.length
+        ? `<p class="note" style="margin:0">You've answered these. ${esc(Agent)} acts on them and moves each to the Archive when it's done.</p>` + g.decided.map(slip).join("")
+        : `<div class="calm">Nothing waiting on ${esc(AGENT)}.</div>`;
+    }
     else if (S.tab === "later"){
       const und = g.later.filter(i => i.status !== "answered"), dec = g.later.filter(i => i.status === "answered");
       html = g.later.length
@@ -354,6 +371,42 @@ details.arch[open] summary{margin-bottom:10px}
     c.canSendToClaude().then(v => { if (v !== S.canClaude){ S.canClaude = v; render(); } }, () => { S.canClaude = "off"; });
   }
   function setTab(id){ S.tab = id; store("desk.tab", id); try { history.replaceState(null, "", "#" + id); } catch(e){} refreshReach(); render(); window.scrollTo({ top: 0 }); }
+
+  // Swipe left for the next tab and right for the previous one, in the rail's order (handy on an iPad or phone).
+  function stepTab(dir){
+    const ids = [...document.querySelectorAll("#tabs .tab")].map(b => b.dataset.tab);
+    let i = ids.indexOf(S.tab);
+    if (i < 0){ const it = find(S.tab); i = ids.indexOf(it ? groupOf(it) : "overview"); }
+    const next = ids[i + dir];
+    if (!next) return;
+    setTab(next);
+    const main = $("#main");
+    main.classList.remove("from-right", "from-left");
+    void main.offsetWidth;
+    main.classList.add(dir > 0 ? "from-right" : "from-left");
+  }
+  $("#main").addEventListener("animationend", (ev) => { if (ev.target === ev.currentTarget) ev.currentTarget.classList.remove("from-right", "from-left"); });
+  let swipe = null;
+  document.addEventListener("touchstart", (ev) => {
+    swipe = null;
+    if (ev.touches.length !== 1 || S.problem || !S.loaded) return;
+    if (window.visualViewport && window.visualViewport.scale > 1.01) return; // zoomed in: a sideways drag pans the page
+    const p = ev.touches[0], edge = 24;
+    // Leave the screen edges to the system's back gesture, and leave alone what scrolls sideways or takes typing.
+    if (p.clientX < edge || p.clientX > window.innerWidth - edge) return;
+    if (ev.target.closest && ev.target.closest(".rail, pre, textarea, input, select, [contenteditable]")) return;
+    swipe = { x: p.clientX, y: p.clientY, at: Date.now() };
+  }, { passive: true });
+  document.addEventListener("touchend", (ev) => {
+    const s = swipe; swipe = null;
+    if (!s || ev.touches.length) return;
+    const p = ev.changedTouches[0], dx = p.clientX - s.x, dy = p.clientY - s.y;
+    if (Math.abs(dx) < 60 || Math.abs(dx) < 1.8 * Math.abs(dy) || Date.now() - s.at > 800) return;
+    const sel = window.getSelection && window.getSelection();
+    if (sel && !sel.isCollapsed) return;
+    stepTab(dx < 0 ? 1 : -1);
+  }, { passive: true });
+  document.addEventListener("touchcancel", () => { swipe = null; }, { passive: true });
 
   // Tell the agent at once, as a comment sent to Claude, in the item's own thread.
   // Call it straight from the click: the platform only sends from the viewer's own recent gesture.
