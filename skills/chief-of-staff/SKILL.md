@@ -115,7 +115,8 @@ If the owner chose a desk in setup, use the owner-desk skill for it:
 - Every item under "Waiting for the owner" also goes on the desk, as a decision or a task, with the same number.
 - You're the only one who writes to the desk. Workers' questions reach it through you.
 - When the owner answers on the desk, act exactly as on an answer in chat: relay it verbatim to the session that asked.
-- The chat still lists the open questions in full, each with a link to its tab on the desk.
+- The chat still lists the open questions in full, each with a link to it on the desk.
+- Each time you update `docs/status.md`, write the same to the desk's Status tab (`board/status`), and keep its Roadmap (`board/roadmap`) in step with the plan. The owner-desk skill has the fields.
 
 ## Where it usually goes wrong
 

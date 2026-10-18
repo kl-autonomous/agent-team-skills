@@ -37,6 +37,10 @@ not when you have time.
 - **Later** holds questions that can wait.
 - **Ask about any item** ("what happens if I say no?"), and the answer
   shows on the same tab.
+- **Status and Roadmap, if the agent keeps them:** where every session
+  stands (its state, what it's doing, whether to restart it, what's done
+  and what's next), and the plan stage by stage with the current stage on
+  top. Each tab appears once the agent writes it.
 - **Swipe left or right** to move between tabs, handy on an iPad or a
   phone. The tab bar follows, keeping the open tab in the middle.
 

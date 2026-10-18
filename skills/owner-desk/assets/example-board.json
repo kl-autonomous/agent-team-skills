@@ -1,0 +1,130 @@
+[
+  {
+    "op": "set",
+    "collection": "board",
+    "doc_id": "status",
+    "data": {
+      "updated": "2026-10-18T09:45:00Z",
+      "oneLine": "Build 1.2 is ready. The beta waits for your upload (№ 13), and the crash in 1.1 needs your call (№ 16).",
+      "sessions": [
+        {
+          "name": "builder",
+          "state": "Waiting",
+          "doing": "Build 1.2 is done and passed review; waiting for your upload.",
+          "last": "1.2 is ready for the beta.",
+          "restart": "No"
+        },
+        {
+          "name": "reviewer",
+          "state": "Working",
+          "doing": "Re-running the list tests on build 1.2.",
+          "last": "PASS on step 14.",
+          "restart": "Yes, after this review"
+        },
+        {
+          "name": "tester",
+          "state": "Working",
+          "doing": "Trying saved lists on two phones.",
+          "last": "Found the crash in 1.1 (№ 16).",
+          "restart": "No"
+        },
+        {
+          "name": "feedback",
+          "state": "Idle",
+          "doing": "Nothing new from testers since 08:00.",
+          "restart": "No"
+        }
+      ],
+      "done": [
+        "Search finds recipes by ingredient (build 1.2).",
+        "The crash on saved lists is fixed and reviewed."
+      ],
+      "next": [
+        {
+          "who": "you",
+          "what": "Answer № 16, then upload build 1.2 (№ 13)."
+        },
+        {
+          "who": "builder",
+          "what": "Start step 15: share a list with a friend."
+        }
+      ]
+    }
+  },
+  {
+    "op": "set",
+    "collection": "board",
+    "doc_id": "roadmap",
+    "data": {
+      "updated": "2026-10-18T09:00:00Z",
+      "headline": "The beta is running. Sharing lists comes next, then the App Store.",
+      "stages": [
+        {
+          "id": "proto",
+          "name": "Prototype",
+          "state": "done",
+          "when": "September",
+          "summary": "Recipes on one phone.",
+          "items": [
+            {
+              "text": "Add and edit recipes",
+              "state": "done"
+            },
+            {
+              "text": "Search by name",
+              "state": "done"
+            }
+          ]
+        },
+        {
+          "id": "beta",
+          "name": "Beta 1.x",
+          "state": "now",
+          "when": "October",
+          "summary": "Testers use it every day; fixes ship each week.",
+          "items": [
+            {
+              "text": "Search by ingredient",
+              "state": "done"
+            },
+            {
+              "text": "Saved lists",
+              "state": "done"
+            },
+            {
+              "text": "Fix the crash on saved lists",
+              "state": "now"
+            },
+            {
+              "text": "Share a list with a friend",
+              "state": "next"
+            }
+          ]
+        },
+        {
+          "id": "v1",
+          "name": "Version 1.0",
+          "state": "next",
+          "when": "November",
+          "summary": "On the App Store.",
+          "items": [
+            {
+              "text": "Store page and screenshots",
+              "state": "next"
+            },
+            {
+              "text": "Privacy labels",
+              "state": "next"
+            }
+          ]
+        },
+        {
+          "id": "v2",
+          "name": "Version 2",
+          "state": "later",
+          "summary": "Sync between devices, maybe paid (№ 15)."
+        }
+      ]
+    }
+  }
+]

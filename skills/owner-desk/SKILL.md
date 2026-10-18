@@ -115,6 +115,30 @@ When a comment wakes you, or at the start of a turn:
 
 Park an item with `later: true`, and bring it back with `later: false`. A decided item can stay on Later until it's time to act on it. Archive instead of deleting: the Archive is the record of what was decided. Delete only on the owner's word.
 
+## Status and Roadmap (optional)
+
+Two more tabs show the owner where the project stands, between the Overview and the items. Each appears once you write its document to the collection `board`, and updates live. Write each with `ArtifactData` (`set` the first time, then `update` pinned with `if_version`). `assets/example-board.json` holds a made-up pair.
+
+**`board/status`**: where every session stands. Update it each time you check on the team; a chief of staff writes it whenever it updates its status page.
+
+| Field | What it holds |
+|---|---|
+| `updated` | when you last checked (ISO time); the page shows how long ago |
+| `oneLine` | where the project stands, in one sentence |
+| `sessions` | `[{name, state, doing, last, restart}]`, a row per session. `state` is a word or two ("Working", "Waiting", "Stopped at a limit"), and the page colours it. `restart` starts with "Yes" when it's a good moment to restart that session |
+| `done` | what finished since the last update, a line each |
+| `next` | `[{who, what}]`: the next steps, the owner's too (`who: "you"`) |
+
+The Status tab counts the owner's urgent and open items by itself; don't repeat them in `oneLine`.
+
+**`board/roadmap`**: the plan, stage by stage. Update it when a stage or one of its items moves.
+
+| Field | What it holds |
+|---|---|
+| `updated` | when you last changed it |
+| `headline` | where the project is in its plan, in one sentence |
+| `stages` | `[{id, name, state, when, summary, items}]`, in order. `state` is `done`, `now`, `next` or `later`; `items` are `[{text, state}]` with `done`, `now` or `next`. The stage marked `now` opens at the top |
+
 ## Change the page
 
 - Republish the page only to change the page itself. Pass the same capabilities, or omit `capabilities` to keep them.

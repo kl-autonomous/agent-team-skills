@@ -139,6 +139,75 @@ details.arch summary .t{flex:1;min-width:0}
 details.arch[open] summary{margin-bottom:10px}
 .note{font-size:13px;color:var(--muted)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:20;max-width:calc(100% - 32px)}
+/* Status and Roadmap: the agent's report and the plan, kept in the db collection "board". */
+.pagehead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 12px}
+.updated{font-size:12.5px;color:var(--muted)}
+.oneline{margin:0;max-width:65ch}
+.needsrow{align-self:flex-start;display:inline-flex;align-items:center;gap:8px}
+.block{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;min-width:0}
+.block h3{font-size:16px;line-height:1.35;margin:0 0 8px;font-weight:700}
+.tablewrap{border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:var(--surface)}
+table.sess{width:100%;border-collapse:collapse;font-size:14.5px}
+table.sess th{text-align:left;font-weight:700;padding:10px 12px;background:var(--code-bg);border-bottom:1px solid var(--line)}
+table.sess th:nth-child(2){width:16%} table.sess th:nth-child(3){width:42%} table.sess th:nth-child(4){width:24%}
+table.sess td{padding:12px;border-top:1px solid var(--line);vertical-align:top}
+table.sess tbody tr:first-child td{border-top:0}
+table.sess td.c-name{white-space:nowrap}
+table.sess td.restart-yes{color:var(--accent);font-weight:700}
+.stt{display:inline-flex;align-items:baseline;gap:7px;font-weight:500}
+.stt .dot{transform:translateY(-1px)}
+.stt.ok{color:var(--ok)} .stt.wait{color:var(--wait)} .stt.needs{color:var(--accent)} .stt.later{color:var(--muted)}
+.sname{display:inline-block;font-weight:500;color:var(--later);background:var(--later-soft);padding:1px 9px;border-radius:6px;white-space:nowrap}
+.sess .last{display:block;font-size:12.5px;color:var(--muted);margin-top:4px}
+ul.ticks{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:7px}
+ul.ticks li{display:grid;grid-template-columns:18px 1fr;gap:6px;max-width:70ch}
+ul.ticks li::before{content:"✓";color:var(--ok);font-weight:700}
+.nexts{display:flex;flex-direction:column}
+.nx .sname{justify-self:start}
+.nx{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--line)}
+.nx:first-child{border-top:0;padding-top:0}
+.here{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--accent);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.headline{margin:0;font-weight:500;max-width:65ch}
+.track{display:flex;gap:3px}
+.track span{flex:1;height:7px;border-radius:4px;background:var(--line)}
+.track span.done{background:var(--ok)} .track span.now{background:var(--accent)} .track span.next{background:color-mix(in srgb,var(--wait) 50%,var(--line))}
+.tracklegend{display:flex;flex-wrap:wrap;gap:4px 14px;font-size:12.5px;color:var(--muted)}
+.tracklegend > span{display:inline-flex;align-items:center;gap:6px}
+.here-list{display:flex;flex-direction:column}
+.here-row{display:flex;flex-direction:column;gap:2px;padding:10px 0;border:0;border-top:1px solid var(--line);background:none;font:inherit;color:inherit;text-align:left;cursor:pointer;width:100%}
+.here-row .hn{font-weight:700}
+.here-row .hl{font-size:14px} .here-row .hl.dim{color:var(--muted)}
+ol.tl{list-style:none;margin:0;padding:0}
+ol.tl > li{position:relative;padding:0 0 14px 32px;scroll-margin-top:72px}
+ol.tl > li::before{content:"";position:absolute;left:10px;top:24px;bottom:0;width:2px;background:var(--line)}
+ol.tl > li:last-child::before{display:none}
+ol.tl > li.done::before{background:var(--ok)}
+ol.tl .node{position:absolute;left:1px;top:12px;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:11px;font-weight:700;color:#fff}
+ol.tl li.done .node{background:var(--ok);border-color:var(--ok)}
+ol.tl li.now .node{background:var(--accent);border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
+ol.tl li.next .node{border-color:var(--wait)}
+details.stage{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:12px 14px}
+ol.tl li.now details.stage{border-color:color-mix(in srgb,var(--accent) 50%,var(--line))}
+details.stage summary{cursor:pointer;display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;list-style:none}
+details.stage summary::-webkit-details-marker{display:none}
+details.stage summary .sn{font-weight:700;font-size:15.5px}
+details.stage .ss{margin:8px 0 0;max-width:65ch;color:var(--muted)}
+ul.ritems{list-style:none;margin:10px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
+ul.ritems li{display:grid;grid-template-columns:18px 1fr;gap:6px;max-width:70ch}
+ul.ritems .m{font-weight:700;color:var(--muted)}
+ul.ritems li.done .m{color:var(--ok)} ul.ritems li.done .t{color:var(--muted)}
+ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
+.needsrow.urgent{background:var(--urgent-soft);border-color:var(--urgent-line);color:var(--urgent);font-weight:700}
+@media (max-width:600px){
+  table.sess thead{display:none}
+  table.sess,table.sess tbody{display:block}
+  table.sess tr{display:block;padding:12px 14px;border-top:1px solid var(--line)}
+  table.sess tbody tr:first-child{border-top:0}
+  table.sess td{display:block;border:0;padding:0;margin-top:8px}
+  table.sess td.c-name,table.sess td.c-state{display:inline-block;margin:0 6px 0 0;vertical-align:middle}
+  table.sess td[data-label]::before{content:attr(data-label);display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+  .nx{grid-template-columns:1fr;gap:4px}
+}
 @media (max-width:520px){ .tiles{grid-template-columns:repeat(2,minmax(0,1fr))} .slip{padding:16px} h1{font-size:22px} }
 @media (prefers-reduced-motion: no-preference){ .slip{animation:rise .18s ease-out} @keyframes rise{from{transform:translateY(4px)}to{transform:none}}
   main.from-right{animation:from-right .2s ease-out} main.from-left{animation:from-left .2s ease-out}
@@ -204,8 +273,130 @@ details.arch[open] summary{margin-bottom:10px}
       outcome: "Both test phones now sync; the reviewer passed the sync test.", archived: "2026-10-17T10:15:00Z" }
   ];
 
+  // Status and Roadmap for the same example project, shown with the example items.
+  const DEMO_BOARD = {
+    "status": {
+      "updated": "2026-10-18T09:45:00Z",
+      "oneLine": "Build 1.2 is ready. The beta waits for your upload (№ 13), and the crash in 1.1 needs your call (№ 16).",
+      "sessions": [
+        {
+          "name": "builder",
+          "state": "Waiting",
+          "doing": "Build 1.2 is done and passed review; waiting for your upload.",
+          "last": "1.2 is ready for the beta.",
+          "restart": "No"
+        },
+        {
+          "name": "reviewer",
+          "state": "Working",
+          "doing": "Re-running the list tests on build 1.2.",
+          "last": "PASS on step 14.",
+          "restart": "Yes, after this review"
+        },
+        {
+          "name": "tester",
+          "state": "Working",
+          "doing": "Trying saved lists on two phones.",
+          "last": "Found the crash in 1.1 (№ 16).",
+          "restart": "No"
+        },
+        {
+          "name": "feedback",
+          "state": "Idle",
+          "doing": "Nothing new from testers since 08:00.",
+          "restart": "No"
+        }
+      ],
+      "done": [
+        "Search finds recipes by ingredient (build 1.2).",
+        "The crash on saved lists is fixed and reviewed."
+      ],
+      "next": [
+        {
+          "who": "you",
+          "what": "Answer № 16, then upload build 1.2 (№ 13)."
+        },
+        {
+          "who": "builder",
+          "what": "Start step 15: share a list with a friend."
+        }
+      ]
+    },
+    "roadmap": {
+      "updated": "2026-10-18T09:00:00Z",
+      "headline": "The beta is running. Sharing lists comes next, then the App Store.",
+      "stages": [
+        {
+          "id": "proto",
+          "name": "Prototype",
+          "state": "done",
+          "when": "September",
+          "summary": "Recipes on one phone.",
+          "items": [
+            {
+              "text": "Add and edit recipes",
+              "state": "done"
+            },
+            {
+              "text": "Search by name",
+              "state": "done"
+            }
+          ]
+        },
+        {
+          "id": "beta",
+          "name": "Beta 1.x",
+          "state": "now",
+          "when": "October",
+          "summary": "Testers use it every day; fixes ship each week.",
+          "items": [
+            {
+              "text": "Search by ingredient",
+              "state": "done"
+            },
+            {
+              "text": "Saved lists",
+              "state": "done"
+            },
+            {
+              "text": "Fix the crash on saved lists",
+              "state": "now"
+            },
+            {
+              "text": "Share a list with a friend",
+              "state": "next"
+            }
+          ]
+        },
+        {
+          "id": "v1",
+          "name": "Version 1.0",
+          "state": "next",
+          "when": "November",
+          "summary": "On the App Store.",
+          "items": [
+            {
+              "text": "Store page and screenshots",
+              "state": "next"
+            },
+            {
+              "text": "Privacy labels",
+              "state": "next"
+            }
+          ]
+        },
+        {
+          "id": "v2",
+          "name": "Version 2",
+          "state": "later",
+          "summary": "Sync between devices, maybe paid (№ 15)."
+        }
+      ]
+    }
+  };
+
   const S = { items: [], loaded: false, tab: null, pick: {}, notes: {}, editing: {}, busy: {}, db: null, comments: null,
-              canClaude: null, problem: null, askOpen: {}, askDraft: {}, demo: false };
+              canClaude: null, problem: null, askOpen: {}, askDraft: {}, demo: false, board: {}, boardLoaded: false, rmOpen: {} };
   const $ = (s) => document.querySelector(s);
   const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const fmt = (iso) => { if (!iso) return ""; const d = new Date(iso); if (isNaN(d)) return ""; return d.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); };
@@ -240,7 +431,7 @@ details.arch[open] summary{margin-bottom:10px}
     const archived = S.items.filter(isArchived).sort((a, b) => String(b.archived || "").localeCompare(String(a.archived || "")));
     return { active, urgent, needs, decided, later, archived };
   }
-  const GROUP_TABS = ["overview", "urgent", "needs", "decided", "later", "archive"];
+  const FIXED_TABS = ["overview", "status", "roadmap", "urgent", "needs", "decided", "later", "archive"];
   // The tab an item's card lives on; a link to an item (#<id>) opens that tab and scrolls to the card.
   const groupOf = (it) => !it ? "overview" : isArchived(it) ? "archive" : it.later ? "later" : it.status === "answered" ? "decided" : it.urgent ? "urgent" : "needs";
   const reduceMotion = () => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){ return false; } };
@@ -251,6 +442,8 @@ details.arch[open] summary{margin-bottom:10px}
     const tab = (id, text, dot, extra) => `<button class="tab" role="tab" aria-selected="${S.tab === id}" data-tab="${esc(id)}">${dot ? `<span class="dot ${dot}"></span>` : ""}<span class="t">${esc(text)}</span>${extra || ""}</button>`;
     const count = (n) => `<span class="count">${n}</span>`;
     t.push(tab("overview", "Overview", "", ""));
+    if (S.board.status) t.push(tab("status", "Status", "", ""));
+    if (S.board.roadmap) t.push(tab("roadmap", "Roadmap", "", ""));
     t.push(`<span class="tab-sep" aria-hidden="true"></span>`);
     if (g.urgent.length) t.push(`<button class="tab urgent" role="tab" aria-selected="${S.tab === "urgent"}" data-tab="urgent"><span aria-hidden="true">⚠️</span><span class="t">Urgent</span>${count(g.urgent.length)}</button>`);
     t.push(tab("needs", "Needs you", "needs", count(g.needs.length)));
@@ -359,6 +552,57 @@ details.arch[open] summary{margin-bottom:10px}
     const askedList = asked.length ? `<div class="slip overview"><span class="sec-label">Questions you asked on later items</span><div class="list">${asked.map(row).join("")}</div></div>` : "";
     return urgentBox + tiles + list + askedList + `<p class="reach">${esc(reachHint())}</p><p class="reach swipe-tip">Swipe left or right to move between tabs.</p>`;
   }
+  // Status and Roadmap read the db collection "board": documents "status" and "roadmap", written by the agent.
+  function ago(iso){
+    const d = new Date(iso); if (!iso || isNaN(d)) return "";
+    const m = Math.round((Date.now() - d) / 60000);
+    if (m < 1) return "just now"; if (m < 60) return m + " min ago";
+    const h = Math.round(m / 60); if (h < 36) return h + " h ago";
+    return Math.round(h / 24) + " days ago";
+  }
+  const stamp = (word, iso) => iso ? `<span class="updated">${word} ${esc(fmt(iso))} · ${esc(ago(iso))}</span>` : "";
+  const stateCls = (s) => /stop|limit|stuck|error/i.test(s) ? "needs" : /wait/i.test(s) ? "wait" : /work|busy|review|build|check/i.test(s) ? "ok" : "later";
+  const boardMissing = (what) => `<div class="slip"><p class="note" style="margin:0">${S.boardLoaded ? `${esc(Agent)} hasn't filled in the ${what} yet. It shows here as soon as it does.` : "Loading…"}</p></div>`;
+  function statusPage(g){
+    const st = S.board.status;
+    if (!st) return boardMissing("status");
+    const parts = [`<div class="pagehead"><h2>Status</h2>${stamp("Checked", st.updated)}</div>`];
+    if (st.oneLine) parts.push(`<p class="oneline">${esc(st.oneLine)}</p>`);
+    if (g.urgent.length) parts.push(`<button class="ghost needsrow urgent" data-tab="urgent">⚠️ ${g.urgent.length} urgent ${g.urgent.length === 1 ? "item" : "items"} on this desk</button>`);
+    if (g.needs.length) parts.push(`<button class="ghost needsrow" data-tab="needs"><span class="dot needs"></span>${g.needs.length} ${g.needs.length === 1 ? "item needs" : "items need"} you on this desk</button>`);
+    const rows = (st.sessions || []).map(s => {
+      const cls = stateCls(s.state || "");
+      return `<tr><td class="c-name"><span class="sname">${esc(s.name)}</span></td><td class="c-state"><span class="stt ${cls}"><span class="dot ${cls}"></span><span>${esc(s.state)}</span></span></td><td data-label="Doing now">${esc(s.doing)}${s.last ? `<span class="last">Last word: ${esc(s.last)}</span>` : ""}</td><td data-label="Restart?" class="${/^yes/i.test(s.restart || "") ? "restart-yes" : ""}">${esc(s.restart || "—")}</td></tr>`;
+    }).join("");
+    if (rows) parts.push(`<div class="tablewrap"><table class="sess"><thead><tr><th>Session</th><th>State</th><th>Doing now</th><th>Restart?</th></tr></thead><tbody>${rows}</tbody></table></div>`);
+    if (st.done && st.done.length) parts.push(`<section class="block"><h3>Done since last time</h3><ul class="ticks">${st.done.map(d => `<li><span>${esc(d)}</span></li>`).join("")}</ul></section>`);
+    if (st.next && st.next.length) parts.push(`<section class="block"><h3>Next</h3><div class="nexts">${st.next.map(n => `<div class="nx"><span class="sname">${esc(n.who)}</span><span>${esc(n.what)}</span></div>`).join("")}</div></section>`);
+    return parts.join("");
+  }
+  const RM = { done: { cls: "ok", text: "Done" }, now: { cls: "needs", text: "Now" }, next: { cls: "wait", text: "Next" }, later: { cls: "later", text: "Later" } };
+  const MARK = { done: "✓", now: "●", next: "○" };
+  function roadmapPage(){
+    const rm = S.board.roadmap;
+    if (!rm) return boardMissing("roadmap");
+    const stages = rm.stages || [];
+    const firstOf = (s, state) => (s.items || []).find(i => i.state === state);
+    const n = (state) => stages.filter(s => s.state === state).length;
+    const track = `<div class="track" aria-hidden="true">${stages.map(s => `<span class="${esc(s.state)}" title="${esc(s.name)}"></span>`).join("")}</div><div class="tracklegend"><span><span class="dot ok"></span>${n("done")} done</span><span><span class="dot needs"></span>${n("now")} now</span><span><span class="dot"></span>${stages.length - n("done") - n("now")} to come</span></div>`;
+    const nowRows = stages.filter(s => s.state === "now").map(s => {
+      const a = firstOf(s, "now"), b = firstOf(s, "next");
+      return `<button class="here-row" data-act="jump" data-id="${esc(s.id)}"><span class="hn">${esc(s.name)}</span>${a ? `<span class="hl"><b>Now:</b> ${esc(a.text)}</span>` : ""}${b ? `<span class="hl dim"><b>Then:</b> ${esc(b.text)}</span>` : ""}</button>`;
+    }).join("");
+    const parts = [`<div class="pagehead"><h2>Roadmap</h2>${stamp("Updated", rm.updated)}</div>`];
+    parts.push(`<div class="here"><span class="sec-label">Current stage</span>${rm.headline ? `<p class="headline">${esc(rm.headline)}</p>` : ""}${track}${nowRows ? `<div class="here-list">${nowRows}</div>` : ""}</div>`);
+    parts.push(`<ol class="tl">${stages.map(s => {
+      const m = RM[s.state] || RM.later, items = s.items || [];
+      const open = S.rmOpen[s.id] != null ? S.rmOpen[s.id] : s.state === "now";
+      const doneN = items.filter(i => i.state === "done").length;
+      return `<li class="${esc(s.state)}" id="stage-${esc(s.id)}"><span class="node">${s.state === "done" ? "✓" : ""}</span><details class="stage" data-stage="${esc(s.id)}" ${open ? "open" : ""}><summary><span class="sn">${esc(s.name)}</span><span class="pill ${m.cls}">${m.text}</span>${s.when ? `<span class="note">${esc(s.when)}</span>` : ""}${items.length && (s.state === "done" || s.state === "now") ? `<span class="note">${doneN} of ${items.length} done</span>` : ""}</summary>${s.summary ? `<p class="ss">${esc(s.summary)}</p>` : ""}${items.length ? `<ul class="ritems">${items.map(i => `<li class="${esc(i.state || "next")}"><span class="m">${MARK[i.state] || "○"}</span><span class="t">${esc(i.text)}</span></li>`).join("")}</ul>` : ""}</details></li>`;
+    }).join("")}</ol>`);
+    return parts.join("");
+  }
+
   function render(){
     const main = $("#main");
     if (S.problem){
@@ -369,12 +613,14 @@ details.arch[open] summary{margin-bottom:10px}
     if (!S.loaded){ $("#tabs").innerHTML = ""; return; }
     const g = groups();
     const ids = new Set(S.items.map(i => i.id));
-    if (!S.tab || (!GROUP_TABS.includes(S.tab) && !ids.has(S.tab))) S.tab = "overview";
-    if (!GROUP_TABS.includes(S.tab)){ S.focus = S.tab; S.tab = groupOf(find(S.tab)); store("desk.tab", S.tab); try { history.replaceState(null, "", "#" + S.tab); } catch(e){} }
+    if (!S.tab || (!FIXED_TABS.includes(S.tab) && !ids.has(S.tab))) S.tab = "overview";
+    if (!FIXED_TABS.includes(S.tab)){ S.focus = S.tab; S.tab = groupOf(find(S.tab)); store("desk.tab", S.tab); try { history.replaceState(null, "", "#" + S.tab); } catch(e){} }
     if (S.tab === "urgent" && !g.urgent.length) S.tab = "needs";
     renderTabs(g);
     let html = "";
     if (S.tab === "overview") html = overview(g);
+    else if (S.tab === "status") html = statusPage(g);
+    else if (S.tab === "roadmap") html = roadmapPage();
     else if (S.tab === "urgent") html = `<p class="note" style="margin:0">⚠️ These can't wait. Each one moves to Decided when you answer it.</p>` + g.urgent.map(slip).join("");
     else if (S.tab === "needs"){
       html = g.needs.length
@@ -521,6 +767,11 @@ details.arch[open] summary{margin-bottom:10px}
     if (el.dataset.tab){ setTab(el.dataset.tab); return; }
     const act = el.dataset.act, id = el.dataset.id, it = id ? find(id) : null;
     if (act === "open"){ openItem(id); return; }
+    if (act === "jump"){
+      S.rmOpen[id] = true; render();
+      const li = document.getElementById("stage-" + id); if (li) li.scrollIntoView({ block: "start" });
+      return;
+    }
     if (act === "ask-toggle"){
       S.askOpen[id] = !S.askOpen[id];
       if (S.askOpen[id]) refreshReach();
@@ -549,6 +800,10 @@ details.arch[open] summary{margin-bottom:10px}
       try { navigator.clipboard.writeText(pre.textContent).then(() => toast("Copied."), fallback); } catch(e){ fallback(); }
     }
   });
+  document.addEventListener("toggle", (ev) => {
+    const el = ev.target;
+    if (el && el.dataset && el.dataset.stage) S.rmOpen[el.dataset.stage] = el.open;
+  }, true);
   document.addEventListener("input", (ev) => {
     const el = ev.target; if (!el.dataset) return;
     if (el.dataset.act === "note") S.notes[el.dataset.id] = el.value;
@@ -569,6 +824,7 @@ details.arch[open] summary{margin-bottom:10px}
 
   function startDemo(){
     S.demo = true; S.items = DEMO.map(x => JSON.parse(JSON.stringify(x))); S.loaded = true;
+    S.board = JSON.parse(JSON.stringify(DEMO_BOARD)); S.boardLoaded = true;
     $("#demo-banner").hidden = false; render();
   }
   async function boot(){
@@ -583,6 +839,13 @@ details.arch[open] summary{margin-bottom:10px}
       S.items = snap.docs.map(d => Object.assign({ id: d.id }, d.data()));
       S.loaded = true; render();
     }, (err) => { S.problem = "The list stopped updating (" + (err && err.code || "unknown") + "). Reload the page."; render(); });
+    // Redraw the page only when it shows the board, so a half-typed answer on another tab is left alone;
+    // elsewhere redraw just the tab rail, which shows Status and Roadmap once they exist.
+    db.collection("board").onSnapshot((snap) => {
+      const b = {}; snap.docs.forEach(d => { b[d.id] = d.data(); });
+      S.board = b; S.boardLoaded = true;
+      if (S.tab === "status" || S.tab === "roadmap") render(); else if (S.loaded && !S.problem) renderTabs(groups());
+    }, () => { S.boardLoaded = true; if (S.tab === "status" || S.tab === "roadmap") render(); });
   }
   boot();
 })();
