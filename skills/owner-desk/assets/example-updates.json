@@ -1,0 +1,54 @@
+[
+  {
+    "op": "set",
+    "collection": "updates",
+    "doc_id": "pr-42",
+    "data": {
+      "pr": 42,
+      "title": "Fix the crash when opening a saved list",
+      "merged": "2026-10-18T09:20:00Z",
+      "reviewed": "PASS",
+      "build": "1.2",
+      "changes": [
+        "Saved lists open without crashing.",
+        "Lists saved just before a crash are kept."
+      ],
+      "note": "Found by the tester (№ 16)."
+    }
+  },
+  {
+    "op": "set",
+    "collection": "updates",
+    "doc_id": "pr-41",
+    "data": {
+      "pr": 41,
+      "title": "Search recipes by ingredient",
+      "merged": "2026-10-18T07:30:00Z",
+      "reviewed": "PASS",
+      "build": "1.2",
+      "summary": "Type two or more ingredients and see the recipes that use them all.",
+      "changes": [
+        "A new ingredient search on the Recipes screen.",
+        "Results show which ingredients matched.",
+        "Tests for searches with typos."
+      ]
+    }
+  },
+  {
+    "op": "set",
+    "collection": "updates",
+    "doc_id": "pr-39",
+    "data": {
+      "pr": 39,
+      "title": "New app icon",
+      "merged": "2026-10-17T12:00:00Z",
+      "reviewed": "PASS",
+      "build": "1.2",
+      "changes": [
+        "The icon you picked in № 11."
+      ],
+      "read": true,
+      "readAt": "2026-10-17T18:00:00Z"
+    }
+  }
+]

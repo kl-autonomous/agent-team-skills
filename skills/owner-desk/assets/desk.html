@@ -139,6 +139,23 @@ details.arch summary .t{flex:1;min-width:0}
 details.arch[open] summary{margin-bottom:10px}
 .note{font-size:13px;color:var(--muted)}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:20;max-width:calc(100% - 32px)}
+/* Tester feedback (kind "beta"): what people trying the project said. Kept off Needs you, Urgent, Later and Decided. */
+.dot.beta{background:var(--later)}
+.slip.beta{border-left:4px solid var(--later)}
+.tester{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--later);background:var(--later-soft);padding:2px 10px;border-radius:999px;font-size:13px}
+.said{margin:0;border-left:3px solid var(--later);background:var(--later-soft);border-radius:0 8px 8px 0;padding:10px 12px;white-space:pre-wrap;max-width:65ch}
+.tq{display:flex;flex-direction:column;gap:8px}
+.tq .copybox pre{font-family:var(--font-ui);font-size:14px}
+/* Updates: one entry per pull request, added only after it passed review and merged. Db collection "updates". */
+.upd{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.upd.new{border-left:4px solid var(--ok)}
+.upd h3{font-size:17px;line-height:1.35;margin:0;font-weight:700;text-wrap:balance}
+.upd .sum{margin:0;max-width:65ch}
+.upd ul{margin:0;padding-left:20px;max-width:65ch;display:flex;flex-direction:column;gap:3px}
+.upd a{color:var(--accent);font-weight:500;text-underline-offset:3px}
+.tab .count.fresh{color:var(--ok);font-weight:700}
+.qchip{font-size:11.5px;font-weight:500;padding:1px 8px;border-radius:999px;background:var(--wait-soft);color:var(--wait);white-space:nowrap}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--surface);padding:9px 16px;border-radius:999px;font-size:13.5px;z-index:20;max-width:calc(100% - 32px)}
 /* Status and Roadmap: the agent's report and the plan, kept in the db collection "board". */
 .pagehead{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 12px}
 .updated{font-size:12.5px;color:var(--muted)}
@@ -247,6 +264,7 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
       title: "Stop build 1.1 for testers? It crashes when a saved list is opened.",
       body: ["Three testers hit it this morning. Build 1.2 has the fix and waits for your upload (№ 13)."],
       recommendation: "Stop it now. Testers keep their lists, and they get 1.2 as soon as it's uploaded.", choices: ["Stop it now", "Leave it running"] },
+    {"id": "b-lists", "kind": "beta", "status": "open", "num": 17, "from": "feedback", "created": "2026-10-18T08:55:00Z", "tester": "Tester A", "build": "1.1", "date": "2026-10-18", "title": "Saved lists disappear after a restart", "said": "I saved three lists last night. This morning only one was left, and I didn't delete anything.", "body": ["Probably the crash in 1.1 (№ 16): lists saved just before a crash were never written."], "testerQuestions": ["Did the app close by itself while you were saving the lists?", "Which list is still there: the first one you saved, or the last?"], "recommendation": "Send both questions, and wait for build 1.2 before changing anything.", "choices": ["Ask the tester", "Not a bug"]},
     { id: "t-upload", kind: "task", status: "open", num: 13, priority: 2, from: "builder", created: "2026-10-18T09:12:00Z",
       title: "Upload build 1.2 to the beta",
       body: ["Only you can do this: it needs your developer account."],
@@ -395,8 +413,51 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
     }
   };
 
+  // Updates for the same example project: one per merged pull request.
+  const DEMO_UPDATES = [
+    {
+      "id": "pr-42",
+      "pr": 42,
+      "title": "Fix the crash when opening a saved list",
+      "merged": "2026-10-18T09:20:00Z",
+      "reviewed": "PASS",
+      "build": "1.2",
+      "changes": [
+        "Saved lists open without crashing.",
+        "Lists saved just before a crash are kept."
+      ],
+      "note": "Found by the tester (№ 16)."
+    },
+    {
+      "id": "pr-41",
+      "pr": 41,
+      "title": "Search recipes by ingredient",
+      "merged": "2026-10-18T07:30:00Z",
+      "reviewed": "PASS",
+      "build": "1.2",
+      "summary": "Type two or more ingredients and see the recipes that use them all.",
+      "changes": [
+        "A new ingredient search on the Recipes screen.",
+        "Results show which ingredients matched.",
+        "Tests for searches with typos."
+      ]
+    },
+    {
+      "id": "pr-39",
+      "pr": 39,
+      "title": "New app icon",
+      "merged": "2026-10-17T12:00:00Z",
+      "reviewed": "PASS",
+      "build": "1.2",
+      "changes": [
+        "The icon you picked in № 11."
+      ],
+      "read": true,
+      "readAt": "2026-10-17T18:00:00Z"
+    }
+  ];
   const S = { items: [], loaded: false, tab: null, pick: {}, notes: {}, editing: {}, busy: {}, db: null, comments: null,
-              canClaude: null, problem: null, askOpen: {}, askDraft: {}, demo: false, board: {}, boardLoaded: false, rmOpen: {} };
+              canClaude: null, problem: null, askOpen: {}, askDraft: {}, demo: false, board: {}, boardLoaded: false, rmOpen: {}, updates: [], updatesLoaded: false };
   const $ = (s) => document.querySelector(s);
   const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
   const fmt = (iso) => { if (!iso) return ""; const d = new Date(iso); if (isNaN(d)) return ""; return d.toLocaleString(undefined, { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); };
@@ -407,8 +468,10 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
   $("#lede").textContent = `Questions only you can decide and tasks only you can do. Answer or tick them here whenever you have time; ${AGENT} picks up your answers, acts on them, and moves finished items to the Archive.`;
 
   const isArchived = (it) => it.status === "archived";
-  const isLater = (it) => !!it.later && !isArchived(it);
-  const isActive = (it) => !isArchived(it) && !it.later;
+  // Tester feedback (kind "beta") lives on its own tab until archived, whatever its status or flags.
+  const isBeta = (it) => it.kind === "beta" && !isArchived(it);
+  const isLater = (it) => !!it.later && !isArchived(it) && !isBeta(it);
+  const isActive = (it) => !isArchived(it) && !it.later && !isBeta(it);
   const byTime = (a, b) => String(a.created || "").localeCompare(String(b.created || ""));
   function statusOf(it){
     if (it.status === "archived") return { cls: "ok", text: "Done", short: "Done" };
@@ -429,11 +492,13 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
     const decided = active.filter(it => it.status === "answered");
     const later = S.items.filter(isLater).sort(byTime);
     const archived = S.items.filter(isArchived).sort((a, b) => String(b.archived || "").localeCompare(String(a.archived || "")));
-    return { active, urgent, needs, decided, later, archived };
+    // Open feedback first, then answered; newest first within each.
+    const beta = S.items.filter(isBeta).sort((a, b) => ((a.status === "answered") - (b.status === "answered")) || byTime(b, a));
+    return { active, urgent, needs, decided, later, archived, beta };
   }
-  const FIXED_TABS = ["overview", "status", "roadmap", "urgent", "needs", "decided", "later", "archive"];
+  const FIXED_TABS = ["overview", "status", "updates", "roadmap", "urgent", "needs", "beta", "decided", "later", "archive", "updarch"];
   // The tab an item's card lives on; a link to an item (#<id>) opens that tab and scrolls to the card.
-  const groupOf = (it) => !it ? "overview" : isArchived(it) ? "archive" : it.later ? "later" : it.status === "answered" ? "decided" : it.urgent ? "urgent" : "needs";
+  const groupOf = (it) => !it ? "overview" : isArchived(it) ? "archive" : isBeta(it) ? "beta" : it.later ? "later" : it.status === "answered" ? "decided" : it.urgent ? "urgent" : "needs";
   const reduceMotion = () => { try { return matchMedia("(prefers-reduced-motion: reduce)").matches; } catch(e){ return false; } };
   const openAsks = (it) => (it.asks || []).filter(a => !a.a).length;
 
@@ -443,14 +508,18 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
     const count = (n) => `<span class="count">${n}</span>`;
     t.push(tab("overview", "Overview", "", ""));
     if (S.board.status) t.push(tab("status", "Status", "", ""));
+    if (S.updates.length){ const fresh = unreadUpdates().length; t.push(tab("updates", "Updates", "", fresh ? `<span class="count fresh">${fresh} new</span>` : "")); }
     if (S.board.roadmap) t.push(tab("roadmap", "Roadmap", "", ""));
     t.push(`<span class="tab-sep" aria-hidden="true"></span>`);
     if (g.urgent.length) t.push(`<button class="tab urgent" role="tab" aria-selected="${S.tab === "urgent"}" data-tab="urgent"><span aria-hidden="true">⚠️</span><span class="t">Urgent</span>${count(g.urgent.length)}</button>`);
     t.push(tab("needs", "Needs you", "needs", count(g.needs.length)));
+    if (g.beta.length) t.push(tab("beta", "Tester feedback", "beta", count(g.beta.length)));
     t.push(`<span class="tab-sep" aria-hidden="true"></span>`);
     t.push(tab("decided", "Decided", "wait", count(g.decided.length)));
     t.push(tab("later", "Later", "later", count(g.later.length)));
     t.push(tab("archive", "Archive", "ok", count(g.archived.length)));
+    // Read updates sit at the far right, out of the way.
+    if (readUpdates().length){ t.push(`<span class="tab-sep" aria-hidden="true"></span>`); t.push(tab("updarch", "Updates archive", "", count(readUpdates().length))); }
     const rail = $("#tabs"), kept = rail.scrollLeft;
     rail.innerHTML = t.join("");
     // Keep the open tab as near the middle of the rail as it can go; glide there when the tab changes.
@@ -540,6 +609,33 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
       ${askBox(it)}
     </article>`;
   }
+  // Tester feedback: who said it, on which build, their words, how the session that read it understands it,
+  // questions to send back to the tester (the owner replies to testers themself), then the owner's choice.
+  function betaSlip(it){
+    const answered = it.status === "answered", archived = isArchived(it);
+    const when = it.date ? (/T/.test(String(it.date)) ? (fmt(it.date) || it.date) : it.date) : fmt(it.created);
+    const pc = archived ? "ok" : answered ? "wait" : "needs";
+    const qs = (it.testerQuestions || []).map((q, i) => {
+      const id = `tq-${it.id}-${i}`;
+      return `<div class="copybox"><div class="head"><span>Question ${i + 1}</span><button class="ghost" data-act="copy" data-target="${id}">Copy</button></div><pre id="${id}">${esc(q)}</pre></div>`;
+    }).join("");
+    return `<article class="slip beta ${answered ? "answered" : ""}" data-item="${esc(it.id)}" aria-labelledby="h-${esc(it.id)}">
+      <div class="meta">${it.num ? `<span class="num">№ ${esc(it.num)}</span>` : ""}<span class="kind">Tester feedback</span><span class="pill ${pc}"><span class="dot ${pc}"></span>${archived ? "Done" : answered ? `Answered · ${AGENT} acting` : "Needs you"}</span></div>
+      <div class="row"><span class="tester">${esc(it.tester || "Unnamed tester")}</span><span class="note">${it.build ? "Build " + esc(it.build) : ""}${it.build && when ? " · " : ""}${esc(when)}</span></div>
+      <h2 id="h-${esc(it.id)}">${esc(it.title || "Suggestion from " + (it.tester || "a tester"))}</h2>
+      ${it.said ? `<div><span class="sec-label">What they said</span><p class="said">${esc(it.said)}</p></div>` : ""}
+      ${(it.body && it.body.length) || (it.bullets && it.bullets.length) ? `<div><span class="sec-label">How ${esc(it.from || AGENT)} reads it</span>${bodyHtml(it)}</div>` : ""}
+      ${qs ? `<div class="tq"><span class="sec-label">Questions to ask the tester</span>${qs}<span class="hint">Copy any you want to send; you reply to testers yourself.</span></div>` : ""}
+      ${it.recommendation ? `<div class="rec"><span class="label">Recommended</span>${esc(it.recommendation)}</div>` : ""}
+      ${copyHtml(it)}
+      ${linksHtml(it)}
+      ${answerBlock(it)}
+      ${it.outcome ? `<div class="outcome"><span class="sec-label">What happened${it.archived ? " · " + esc(fmt(it.archived)) : ""}</span>${esc(it.outcome)}</div>` : ""}
+      ${controls(it)}
+      ${asksHtml(it)}
+      ${askBox(it)}
+    </article>`;
+  }
   function overview(g){
     const und = g.needs, dec = g.decided;
     const tile = (id, cls, n, text) => `<button class="tile ${cls}" data-tab="${id}"><div class="n">${n}</div><div class="l">${text}</div></button>`;
@@ -550,7 +646,9 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
       + (dec.length ? `<div class="divider"><span>Decided · ${esc(AGENT)} is acting on these</span></div><div class="slip overview decided"><div class="list">${dec.map(row).join("")}</div></div>` : "");
     const asked = g.later.filter(i => openAsks(i));
     const askedList = asked.length ? `<div class="slip overview"><span class="sec-label">Questions you asked on later items</span><div class="list">${asked.map(row).join("")}</div></div>` : "";
-    return urgentBox + tiles + list + askedList + `<p class="reach">${esc(reachHint())}</p><p class="reach swipe-tip">Swipe left or right to move between tabs.</p>`;
+    const betaOpen = g.beta.filter(i => i.status !== "answered").length;
+    const betaRow = betaOpen ? `<button class="ghost needsrow" data-tab="beta"><span class="dot beta"></span>${betaOpen} ${betaOpen === 1 ? "note" : "notes"} from testers to read</button>` : "";
+    return urgentBox + tiles + list + askedList + betaRow + `<p class="reach">${esc(reachHint())}</p><p class="reach swipe-tip">Swipe left or right to move between tabs.</p>`;
   }
   // Status and Roadmap read the db collection "board": documents "status" and "roadmap", written by the agent.
   function ago(iso){
@@ -603,6 +701,68 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
     return parts.join("");
   }
 
+  // Updates: newest merge first. An update stays on Updates until the owner marks it read (field `read`, saved in the db,
+  // so it holds on every device); read ones move to "Updates archive" at the far right of the rail.
+  const updTime = (u) => String(u.merged || u.created || "");
+  const updSorted = () => (S.updates || []).slice().sort((a, b) => updTime(b).localeCompare(updTime(a)));
+  const unreadUpdates = () => updSorted().filter(u => !u.read);
+  const readUpdates = () => updSorted().filter(u => u.read).sort((a, b) => String(b.readAt || "").localeCompare(String(a.readAt || "")));
+  function updCard(u, isRead){
+    const head = [u.pr ? `<span class="num">PR #${esc(u.pr)}</span>` : "", u.merged ? `<span>merged ${esc(fmt(u.merged))}</span>` : "", u.reviewed ? `<span class="pill ok"><span class="dot ok"></span>Reviewer: ${esc(u.reviewed)}</span>` : "", u.build ? `<span>in build ${esc(u.build)}</span>` : ""].filter(Boolean).join("");
+    const busy = !!S.busy["upd-" + u.id];
+    const ctl = isRead
+      ? `<div class="row"><span class="note">Read ${esc(fmt(u.readAt))}</span><button class="ghost" data-act="upd-unread" data-id="${esc(u.id)}" ${busy ? "disabled" : ""}>Back to Updates</button></div>`
+      : `<div class="row"><button class="primary" data-act="upd-read" data-id="${esc(u.id)}" ${busy ? "disabled" : ""}>Mark as read</button></div>`;
+    return `<section class="upd ${isRead ? "" : "new"}"><div class="meta">${head}</div><h3>${esc(u.title || "Changes")}</h3>${u.summary ? `<p class="sum">${esc(u.summary)}</p>` : ""}${u.changes && u.changes.length ? `<div><span class="sec-label">What changed</span><ul>${u.changes.map(c => `<li>${esc(c)}</li>`).join("")}</ul></div>` : ""}${u.note ? `<p class="note" style="margin:0">${esc(u.note)}</p>` : ""}${u.url ? `<a href="${esc(u.url)}" target="_blank" rel="noopener">Open the pull request</a>` : ""}${ctl}</section>`;
+  }
+  function updatesPage(){
+    if (!S.updatesLoaded) return `<div class="slip"><p class="note" style="margin:0">Loading…</p></div>`;
+    const list = unreadUpdates();
+    const parts = [`<div class="pagehead"><h2>Updates</h2>${list.length > 1 ? `<button class="ghost" data-act="upd-allread">Mark all as read</button>` : ""}</div>`, `<p class="note" style="margin:0">What changed that you haven't seen yet, one entry per pull request. ${esc(Agent)} adds each one only after it passed review and merged. Mark it read and it moves to Updates archive, at the far right.</p>`];
+    parts.push(list.length ? list.map(u => updCard(u, false)).join("") : `<div class="calm">You're up to date.</div>`);
+    return parts.join("");
+  }
+  function updArchivePage(){
+    if (!S.updatesLoaded) return `<div class="slip"><p class="note" style="margin:0">Loading…</p></div>`;
+    const list = readUpdates();
+    return `<div class="pagehead"><h2>Updates archive</h2></div><p class="note" style="margin:0">Updates you've already read, last read first. Separate from the decisions Archive.</p>` + (list.length ? list.map(u => updCard(u, true)).join("") : `<p class="note">Updates you mark as read will appear here.</p>`);
+  }
+  async function markUpdates(ids, read){
+    if ((!S.db && !S.demo) || !ids.length) return;
+    ids.forEach(id => { S.busy["upd-" + id] = true; }); render();
+    const at = new Date().toISOString();
+    const write = (id, data) => S.demo ? Object.assign(S.updates.find(u => u.id === id) || {}, data) : S.db.doc("updates/" + id).update(data);
+    let failed = 0;
+    for (const id of ids){
+      try { await write(id, read ? { read: true, readAt: at } : { read: false }); }
+      catch(e){ failed++; }
+      finally { S.busy["upd-" + id] = false; }
+    }
+    render();
+    toast(failed ? "Couldn't save that. Check the connection and try again." : read ? (ids.length > 1 ? "All marked as read. They're in Updates archive." : "Marked as read. It's in Updates archive.") : "Back on Updates.");
+  }
+  function roadmapPage(){
+    const rm = S.board.roadmap;
+    if (!rm) return boardMissing("roadmap");
+    const stages = rm.stages || [];
+    const firstOf = (s, state) => (s.items || []).find(i => i.state === state);
+    const n = (state) => stages.filter(s => s.state === state).length;
+    const track = `<div class="track" aria-hidden="true">${stages.map(s => `<span class="${esc(s.state)}" title="${esc(s.name)}"></span>`).join("")}</div><div class="tracklegend"><span><span class="dot ok"></span>${n("done")} done</span><span><span class="dot needs"></span>${n("now")} now</span><span><span class="dot"></span>${stages.length - n("done") - n("now")} to come</span></div>`;
+    const nowRows = stages.filter(s => s.state === "now").map(s => {
+      const a = firstOf(s, "now"), b = firstOf(s, "next");
+      return `<button class="here-row" data-act="jump" data-id="${esc(s.id)}"><span class="hn">${esc(s.name)}</span>${a ? `<span class="hl"><b>Now:</b> ${esc(a.text)}</span>` : ""}${b ? `<span class="hl dim"><b>Then:</b> ${esc(b.text)}</span>` : ""}</button>`;
+    }).join("");
+    const parts = [`<div class="pagehead"><h2>Roadmap</h2>${stamp("Updated", rm.updated)}</div>`];
+    parts.push(`<div class="here"><span class="sec-label">Current stage</span>${rm.headline ? `<p class="headline">${esc(rm.headline)}</p>` : ""}${track}${nowRows ? `<div class="here-list">${nowRows}</div>` : ""}</div>`);
+    parts.push(`<ol class="tl">${stages.map(s => {
+      const m = RM[s.state] || RM.later, items = s.items || [];
+      const open = S.rmOpen[s.id] != null ? S.rmOpen[s.id] : s.state === "now";
+      const doneN = items.filter(i => i.state === "done").length;
+      return `<li class="${esc(s.state)}" id="stage-${esc(s.id)}"><span class="node">${s.state === "done" ? "✓" : ""}</span><details class="stage" data-stage="${esc(s.id)}" ${open ? "open" : ""}><summary><span class="sn">${esc(s.name)}</span><span class="pill ${m.cls}">${m.text}</span>${s.when ? `<span class="note">${esc(s.when)}</span>` : ""}${items.length && (s.state === "done" || s.state === "now") ? `<span class="note">${doneN} of ${items.length} done</span>` : ""}</summary>${s.summary ? `<p class="ss">${esc(s.summary)}</p>` : ""}${items.length ? `<ul class="ritems">${items.map(i => `<li class="${esc(i.state || "next")}"><span class="m">${MARK[i.state] || "○"}</span><span class="t">${esc(i.text)}</span></li>`).join("")}</ul>` : ""}</details></li>`;
+    }).join("")}</ol>`);
+    return parts.join("");
+  }
+
   function render(){
     const main = $("#main");
     if (S.problem){
@@ -621,6 +781,13 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
     if (S.tab === "overview") html = overview(g);
     else if (S.tab === "status") html = statusPage(g);
     else if (S.tab === "roadmap") html = roadmapPage();
+    else if (S.tab === "updates") html = updatesPage();
+    else if (S.tab === "updarch") html = updArchivePage();
+    else if (S.tab === "beta"){
+      html = g.beta.length
+        ? `<p class="note" style="margin:0">What people trying the project said, with questions you could ask them back. Nothing here is urgent; answer when you like. Answered ones stay here until ${esc(AGENT)} archives them.</p>` + g.beta.map(betaSlip).join("")
+        : `<div class="calm">No feedback from testers right now.</div>`;
+    }
     else if (S.tab === "urgent") html = `<p class="note" style="margin:0">⚠️ These can't wait. Each one moves to Decided when you answer it.</p>` + g.urgent.map(slip).join("");
     else if (S.tab === "needs"){
       html = g.needs.length
@@ -640,7 +807,7 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
           + (dec.length ? `<div class="divider"><span>Decided · kept here until it's time</span></div>` + dec.map(slip).join("") : "")
         : `<div class="calm">Nothing parked for later.</div>`;
     }
-    else if (S.tab === "archive") html = g.archived.length ? g.archived.map(it => `<details class="arch"><summary><span class="dot ok"></span><span class="t">${it.num ? `<span class="num">№ ${esc(it.num)}</span> · ` : ""}${esc(it.title)}</span><span class="note">${esc(fmt(it.archived))}</span></summary>${slip(it)}</details>`).join("") : `<p class="note">Finished items will appear here.</p>`;
+    else if (S.tab === "archive") html = g.archived.length ? g.archived.map(it => `<details class="arch"><summary><span class="dot ok"></span><span class="t">${it.num ? `<span class="num">№ ${esc(it.num)}</span> · ` : ""}${esc(it.title)}</span><span class="note">${esc(fmt(it.archived))}</span></summary>${it.kind === "beta" ? betaSlip(it) : slip(it)}</details>`).join("") : `<p class="note">Finished items will appear here.</p>`;
     main.innerHTML = html;
     if (S.focus){ const id = S.focus; S.focus = null; focusItem(id); }
   }
@@ -767,6 +934,9 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
     if (el.dataset.tab){ setTab(el.dataset.tab); return; }
     const act = el.dataset.act, id = el.dataset.id, it = id ? find(id) : null;
     if (act === "open"){ openItem(id); return; }
+    if (act === "upd-read"){ markUpdates([id], true); return; }
+    if (act === "upd-unread"){ markUpdates([id], false); return; }
+    if (act === "upd-allread"){ markUpdates(unreadUpdates().map(u => u.id), true); return; }
     if (act === "jump"){
       S.rmOpen[id] = true; render();
       const li = document.getElementById("stage-" + id); if (li) li.scrollIntoView({ block: "start" });
@@ -825,6 +995,7 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
   function startDemo(){
     S.demo = true; S.items = DEMO.map(x => JSON.parse(JSON.stringify(x))); S.loaded = true;
     S.board = JSON.parse(JSON.stringify(DEMO_BOARD)); S.boardLoaded = true;
+    S.updates = JSON.parse(JSON.stringify(DEMO_UPDATES)); S.updatesLoaded = true;
     $("#demo-banner").hidden = false; render();
   }
   async function boot(){
@@ -846,6 +1017,12 @@ ul.ritems li.now .m{color:var(--accent)} ul.ritems li.now .t{font-weight:500}
       S.board = b; S.boardLoaded = true;
       if (S.tab === "status" || S.tab === "roadmap") render(); else if (S.loaded && !S.problem) renderTabs(groups());
     }, () => { S.boardLoaded = true; if (S.tab === "status" || S.tab === "roadmap") render(); });
+    // Updates redraw the page only on their own tabs; elsewhere just the rail's "new" count changes.
+    const onUpdates = () => { if (S.tab === "updates" || S.tab === "updarch") render(); else if (S.loaded && !S.problem) renderTabs(groups()); };
+    db.collection("updates").onSnapshot((snap) => {
+      S.updates = snap.docs.map(d => Object.assign({ id: d.id }, d.data()));
+      S.updatesLoaded = true; onUpdates();
+    }, () => { S.updatesLoaded = true; onUpdates(); });
   }
   boot();
 })();

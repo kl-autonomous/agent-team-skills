@@ -69,7 +69,7 @@ Each item is one document in the collection `items`. Its document id is its hand
 
 | Field | Written by | What it holds |
 |---|---|---|
-| `kind` | you | `"decision"` or `"task"` |
+| `kind` | you | `"decision"`, `"task"`, or `"beta"` for feedback from a tester (see below) |
 | `status` | both | `"open"`; the page sets `"answered"`; you set `"archived"` |
 | `later` | you | `true` parks it on the Later tab |
 | `urgent` | you | `true` puts it on a yellow Urgent tab and at the top of the Overview. Only for what can't wait: a deadline today, or something broken for users |
@@ -89,7 +89,9 @@ Each item is one document in the collection `items`. Its document id is its hand
 | `thread` | page | the comment thread the page uses for this item; leave it alone |
 | `outcome`, `archived` | you | what happened, in one line; when you archived it |
 
-`assets/example-items.json` holds seven made-up items, as `ArtifactData` `batch` writes. Use them to try a board, never on the owner's real one.
+**Tester feedback** (`kind: "beta"`) gets its own tab and never counts as something that needs the owner, whatever its flags; it stays there when answered, until you archive it. It's a decision with these extra fields: `tester` (a name or a label; real names only on a private desk, never in a repo or an example), `build`, `date`, `said` (their words, as they wrote them) and `testerQuestions` (questions the owner can send back; the owner replies to testers themselves). `body` holds how the session that read it understands it, and `from` names that session. Attach the tester's screenshots as files in `links`.
+
+`assets/example-items.json` holds eight made-up items, as `ArtifactData` `batch` writes. Use them to try a board, never on the owner's real one.
 
 ## Post items
 
@@ -99,6 +101,7 @@ Each item is one document in the collection `items`. Its document id is its hand
 - Write each item so it stands on its own: what is being decided, what changes either way, and what you recommend.
 - A task lists the exact steps, the text to paste in `copies`, and the guide in `links`.
 - **To attach a file:** read the whole file first, then upload it with `Artifact` (`url` of the board, `asset: true`) and link it as `/_blob/<asset id>`.
+- **A test item on a live board can get answered.** Title it "TEST ITEM", and delete it pinned to the version you read; if the version moved, read it again first.
 - **Never put passwords, keys or private records in an item.** A task that needs a secret says where to type it, never what it is.
 
 ## Read, act, archive
@@ -139,8 +142,23 @@ The Status tab counts the owner's urgent and open items by itself; don't repeat 
 | `headline` | where the project is in its plan, in one sentence |
 | `stages` | `[{id, name, state, when, summary, items}]`, in order. `state` is `done`, `now`, `next` or `later`; `items` are `[{text, state}]` with `done`, `now` or `next`. The stage marked `now` opens at the top |
 
+## Updates (optional)
+
+An Updates tab lists what changed, one entry per pull request, in the collection `updates`. Add an entry only after the reviewer passed it and it merged, never when the builder finishes. The tab shows how many are new. The owner marks each one read (saved in the database, so it holds on every device), and read entries move to an "Updates archive" tab at the far right. `assets/example-updates.json` holds three made-up entries.
+
+| Field | Written by | What it holds |
+|---|---|---|
+| `pr`, `title` | you | the pull request's number and a plain title |
+| `merged`, `reviewed` | you | when it merged (ISO time), and the reviewer's verdict ("PASS") |
+| `changes` | you | what changed, a line each, in words the owner uses |
+| `summary`, `build`, `note`, `url` | you | optional: one sentence, the build it ships in, a remark, a link |
+| `read`, `readAt` | page | set when the owner marks it read; leave them alone |
+
 ## Change the page
 
 - Republish the page only to change the page itself. Pass the same capabilities, or omit `capabilities` to keep them.
 - If another session published the board, read it first (`Artifact` `read`) and build on what comes back.
 - The items live in the database, so they survive a republish.
+- Keep anything the owner marks (read, seen, ticked) in the database, never in browser storage: it has to hold on every device.
+- A collection other than `items` redraws the page only on its own tab; elsewhere, redraw just the tab rail, or a live write wipes a half-typed answer.
+- To test without signing in, serve a local copy from 127.0.0.1 with a stand-in `window.claude.use("db")` that supports `collection().onSnapshot` and `doc().update`. Load a copy of the real items, and compare every tab before and after the change.

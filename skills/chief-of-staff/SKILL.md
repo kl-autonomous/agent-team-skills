@@ -117,6 +117,7 @@ If the owner chose a desk in setup, use the owner-desk skill for it:
 - When the owner answers on the desk, act exactly as on an answer in chat: relay it verbatim to the session that asked.
 - The chat still lists the open questions in full, each with a link to it on the desk.
 - Each time you update `docs/status.md`, write the same to the desk's Status tab (`board/status`), and keep its Roadmap (`board/roadmap`) in step with the plan. The owner-desk skill has the fields.
+- When a pull request has passed review and merged, add it to the desk's Updates. Feedback from testers goes on the desk as tester feedback (`kind: "beta"`), never as something that needs the owner.
 
 ## Where it usually goes wrong
 

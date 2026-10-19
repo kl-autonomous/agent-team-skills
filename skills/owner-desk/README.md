@@ -41,6 +41,12 @@ not when you have time.
   stands (its state, what it's doing, whether to restart it, what's done
   and what's next), and the plan stage by stage with the current stage on
   top. Each tab appears once the agent writes it.
+- **Updates, if the agent keeps them:** one entry per pull request, added
+  only after it passed review and merged. Mark each one read and it moves
+  to an Updates archive at the far right.
+- **Tester feedback** gets its own tab: the tester's words, how the agent
+  reads them, and questions you can send back. It never counts as
+  something that needs you.
 - **Swipe left or right** to move between tabs, handy on an iPad or a
   phone. The tab bar follows, keeping the open tab in the middle.
 

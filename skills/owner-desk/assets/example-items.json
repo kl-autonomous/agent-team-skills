@@ -56,6 +56,35 @@
   {
     "op": "set",
     "collection": "items",
+    "doc_id": "b-lists",
+    "data": {
+      "kind": "beta",
+      "status": "open",
+      "num": 17,
+      "from": "feedback",
+      "created": "2026-10-18T08:55:00Z",
+      "tester": "Tester A",
+      "build": "1.1",
+      "date": "2026-10-18",
+      "title": "Saved lists disappear after a restart",
+      "said": "I saved three lists last night. This morning only one was left, and I didn't delete anything.",
+      "body": [
+        "Probably the crash in 1.1 (№ 16): lists saved just before a crash were never written."
+      ],
+      "testerQuestions": [
+        "Did the app close by itself while you were saving the lists?",
+        "Which list is still there: the first one you saved, or the last?"
+      ],
+      "recommendation": "Send both questions, and wait for build 1.2 before changing anything.",
+      "choices": [
+        "Ask the tester",
+        "Not a bug"
+      ]
+    }
+  },
+  {
+    "op": "set",
+    "collection": "items",
     "doc_id": "t-upload",
     "data": {
       "kind": "task",
