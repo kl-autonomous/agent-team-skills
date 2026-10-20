@@ -1,10 +1,21 @@
 {
   "name": "agent-team-skills",
-  "description": "Run a team of Claude sessions without reading every chat: sessions that restart without losing work, a builder and an independent reviewer, a chief of staff between you and the team, and a board for everything only you can decide or do.",
-  "version": "1.1.0",
-  "author": { "name": "kl-autonomous" },
+  "description": "Run a team of Claude sessions without reading every chat: sessions that restart without losing work, a builder and an independent reviewer, a chief of staff between you and the team, and a board for everything only you can decide or do, and a fence for a helper session beside the team.",
+  "version": "1.2.0",
+  "author": {
+    "name": "kl-autonomous"
+  },
   "homepage": "https://github.com/kl-autonomous/agent-team-skills",
   "repository": "https://github.com/kl-autonomous/agent-team-skills",
   "license": "MIT",
-  "keywords": ["sessions", "coordination", "code-review", "context", "chief-of-staff", "owner-desk", "multi-agent"]
+  "keywords": [
+    "sessions",
+    "coordination",
+    "code-review",
+    "context",
+    "chief-of-staff",
+    "owner-desk",
+    "multi-agent",
+    "side-session"
+  ]
 }

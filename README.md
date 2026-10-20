@@ -1,6 +1,6 @@
 # agent-team-skills
 
-Four Claude Code skills for running a team of Claude sessions without
+Five Claude Code skills for running a team of Claude sessions without
 reading every chat.
 
 **[See how they change your workflow →](https://kl-autonomous.github.io/agent-team-skills/)**
@@ -16,10 +16,12 @@ reading every chat.
 | [build-review-loop](skills/build-review-loop/) | A builder builds one step at a time; an independent reviewer checks the exact commit in its own copy, re-runs everything, and answers PASS, FIX or STOP. An optional tester tries to break the risky parts. | two sessions |
 | [chief-of-staff](skills/chief-of-staff/) | One session between you and the rest. It passes your words on exactly as you wrote them, gathers every session's questions into one numbered round, keeps hand-offs moving, keeps a status page, and tells you when a session should restart. | three or more sessions |
 | [owner-desk](skills/owner-desk/) | A live board for everything only you can decide or do. You answer from your phone whenever you like, your answer wakes the agent, and it acts and archives the item. | any time decisions pile up |
+| [side-session](skills/side-session/) | Fences off a helper session for one topic beside the team: it reads the project freely, keeps its own notes, never writes to the team's files or messages the team's sessions, and hands you a proposal with one line to paste. | one extra session for one thing |
 
 They stack: every session is restart-ready; a builder and a reviewer form
-the loop; a chief of staff runs the team for you; and the desk holds what
-waits for you.
+the loop; a chief of staff runs the team for you; the desk holds what
+waits for you; and a side session helps you with one thing without
+touching any of that.
 
 ## Why I built this
 

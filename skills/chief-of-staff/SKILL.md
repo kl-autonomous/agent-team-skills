@@ -108,6 +108,7 @@ Each duty exists because of a way the team fails without it.
 
 - **build-review-loop:** the builder, reviewer and tester run their own loop and message each other directly. You watch the hand-offs, collect their questions for the owner, and track their restarts.
 - **restart-ready:** every session, you included, keeps its state in files and writes its own restart prompt. That's what makes the restart protocol cheap.
+- **side-session:** a session the owner runs beside the team, for one topic. Leave it alone: no status row beyond "not run by me", no broadcasts, no restart tracking. Its results reach the team only as a line the owner pastes to you.
 
 ## With the owner-desk skill
 
