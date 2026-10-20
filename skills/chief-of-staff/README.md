@@ -27,7 +27,7 @@ never writes code, reviews or designs.
 |---|---|
 | passes your words on exactly as you wrote them, starting "the owner says:" | instructions aren't changed by a summary on the way |
 | looks up facts itself, and asks you only for decisions, in one numbered round, each with a recommended answer | you can reply "1 yes, 2 no" from your phone |
-| watches the hand-offs, checks every session after each report, and resends work that stalled | nothing sits idle without anyone noticing |
+| watches the hand-offs, waits for each session's idle notice, checks the result in the files, and resends work that stalled | nothing stalls unnoticed, and idle sessions aren't woken for nothing |
 | keeps `docs/status.md`: who is doing what, what waits for you, what's done, what's next | you can see the whole team in one page |
 | tells you when a session should restart, and has the session write the prompt for its own replacement | a restart loses nothing |
 | sends you a notification only when something finishes, needs you, or risks data, devices, accounts or money | you're not pinged all day |

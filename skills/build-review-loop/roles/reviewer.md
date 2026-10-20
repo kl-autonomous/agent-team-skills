@@ -39,6 +39,11 @@ git worktree remove ../<project>-review
    the project's rules.
 5. **Look at the screen yourself,** for anything visible: your own
    screenshots, in every mode the project supports, at full size.
+   Screenshots stay in your context until you restart, so take one per
+   screen state; for a detail, a zoom crop, never a second full
+   screenshot; when a screen should be unchanged, compare the two image
+   files with a command. Save them to disk and look only at the ones
+   that decide the verdict.
 6. **Check the records:** the state file says the step is done, and new
    decisions are in the decisions file.
 

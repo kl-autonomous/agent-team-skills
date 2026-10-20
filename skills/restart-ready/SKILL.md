@@ -31,6 +31,8 @@ Start a state file from `templates/state.md`.
 4. **Update your state file at the end of each unit of work,** before you report it done. Commit it with the work when you can.
 5. **Write corrections down at once.** When the owner corrects you or decides something, record it straight away: a rule in the project notes, a decision in the decisions file, with the date and their words. A correction left in chat dies with the session, and the next session repeats the mistake.
 6. **Never keep a promise only in chat.** "I'll check that after the merge" goes under "Promised" in your state file.
+7. **Group tool calls.** Every tool call is a turn, and every turn re-reads your whole context. Run independent calls together, and never spend a call on a routine line: a separate `date` before every message once cost one session 280 turns.
+8. **Know which files are read whole.** The state file is read in full at every start, so it stays one screen. Lookup files, such as decisions by number, may be long, as long as every entry has a key to find it by.
 
 ## End each unit of work with the restart line
 

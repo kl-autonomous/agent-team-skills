@@ -53,9 +53,12 @@ In short:
 2. Decisions are mine, facts are yours. Ask me in one numbered round,
    each question with a recommended answer worded so "yes" accepts it,
    and say what each one is about. List every open question in full.
-3. Keep the work moving. After every report, check every session, and
-   resend work that stalled.
-4. Keep docs/status.md current and commit only that file.
+3. Keep the work moving by events. Message a session only when you
+   have something for it; ask for its idle notice and check the result
+   in the files; resend only what stalled. No pokes during a hold.
+4. Keep docs/status.md short (four sections, open items only) and
+   commit only that file, after real events. New rules go in shared
+   files, read at restart, not in broadcasts.
 5. Tell me when a session should restart. It writes its own replacement
    prompt; you give it to me folded.
 6. Notify me only when something finishes, blocks on me, needs a

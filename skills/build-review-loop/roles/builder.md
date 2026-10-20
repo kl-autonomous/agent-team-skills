@@ -21,6 +21,11 @@ checks each step before you go on. Read the loop in `SKILL.md` first.
    only the new tests. For anything on screen, take screenshots in every
    mode the project supports (light and dark, each language), and look at
    them at full size.
+   Screenshots stay in your context until you restart, so take one per
+   screen state; for a detail, a zoom crop, never a second full
+   screenshot; when a screen should be unchanged, compare the two image
+   files with a command. Save them to disk and look only at the ones
+   that decide.
 5. **Update the records:**
    - your state file (step done, waiting for review);
    - the decisions file, for any new decision the owner made;

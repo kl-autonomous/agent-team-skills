@@ -15,7 +15,7 @@ One session builds; another, independent session checks. An agent that grades it
 | **Reviewer** | `roles/reviewer.md` | checks the exact commit in its own copy; answers PASS, FIX or STOP; writes a review file | edits the code, tests or design; pushes to the main branch |
 | **Tester** (optional) | `roles/tester.md` | makes adversarial passes, trying to break what's built | edits, commits or pushes |
 
-Use a different model for the reviewer than for the builder where you can; a different model misses different things. Every role works restart-ready (see the restart-ready skill): its state lives in files, and it ends each unit of work by saying whether it's a good moment to restart it.
+Use a different model for the reviewer than for the builder where you can; a different model misses different things. This drifts: when one model's usage runs out, the reviewer gets moved to the builder's model. Put it back when the usage resets. Every role works restart-ready (see the restart-ready skill): its state lives in files, and it ends each unit of work by saying whether it's a good moment to restart it.
 
 ## Setup
 

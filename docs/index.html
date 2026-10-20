@@ -174,14 +174,15 @@ section{display:flex;flex-direction:column;gap:22px}
 <div class="wrap">
 
   <header class="hero">
-    <span class="eyebrow">Four skills for Claude Code</span>
+    <span class="eyebrow">Five skills for Claude Code</span>
     <h1>Run a team of Claude sessions without reading every chat.</h1>
-    <p class="lede"><b>restart-ready</b> lets any session restart without losing work. <b>build-review-loop</b> has a second session check the first one's work. <b>chief-of-staff</b> puts one session between you and the rest of the team. <b>owner-desk</b> gives you one board for everything only you can decide or do. Use what you need.</p>
-    <div class="names" aria-label="The two skills">
+    <p class="lede"><b>restart-ready</b> lets any session restart without losing work. <b>build-review-loop</b> has a second session check the first one's work. <b>chief-of-staff</b> puts one session between you and the rest of the team. <b>owner-desk</b> gives you one board for everything only you can decide or do. <b>side-session</b> lets a helper work beside the team without adding to its work. Use what you need.</p>
+    <div class="names" aria-label="The five skills">
       <span class="name rr">restart-ready</span>
       <span class="name brl">build-review-loop</span>
       <span class="name cos">chief-of-staff</span>
       <span class="name desk">owner-desk</span>
+      <span class="name">side-session</span>
     </div>
   </header>
 
@@ -275,14 +276,15 @@ section{display:flex;flex-direction:column;gap:22px}
   </section>
 
   <section aria-labelledby="skills">
-    <h2 id="skills" class="read">The four skills</h2>
+    <h2 id="skills" class="read">The five skills</h2>
     <div class="skills">
       <article class="skill r">
         <span class="k">restart-ready</span>
         <h3>Sessions you can throw away</h3>
         <p>A long chat gets slow and forgetful. If everything that matters is in files, a fresh session picks up where the old one stopped.</p>
         <ul>
-          <li>Keeps a short state file: done, in progress, next, waiting for whom. History goes to a separate log.</li>
+          <li>Keeps a short state file: done, in progress, next, waiting for whom. History goes to a separate log, because the state file is re-read at every start.</li>
+          <li>Groups tool calls: every call is a turn that re-reads the whole context.</li>
           <li>Reads only what the step needs, and sends wide searches to a sub-agent.</li>
           <li>Writes corrections down at once, so the next session doesn't repeat them.</li>
           <li>Ends each unit of work by saying whether it's a good moment to restart it.</li>
@@ -316,8 +318,9 @@ section{display:flex;flex-direction:column;gap:22px}
         <ul>
           <li>Passes your words on word for word, and brings each session's questions back to you.</li>
           <li>Looks up facts itself, and asks you only for decisions, in one numbered round.</li>
-          <li>Keeps the hand-offs moving and resends work that stalled.</li>
-          <li>Keeps a short status page in your repo.</li>
+          <li>Keeps the hand-offs moving: messages a session only when it has something for it, waits for the idle notice, and resends work that stalled.</li>
+          <li>Puts new rules in a shared file sessions read at restart, instead of broadcasting them.</li>
+          <li>Keeps a short status page in your repo: four sections, open items only.</li>
           <li>Tells you when a session should restart fresh, and has it write its own replacement prompt.</li>
           <li>Sends you a notification only when something needs you.</li>
         </ul>
@@ -363,6 +366,22 @@ section{display:flex;flex-direction:column;gap:22px}
         </div>
         <p class="example">An example item, with made-up content. The buttons work on this page only.</p>
       </article>
+
+      <article class="skill">
+        <span class="k">side-session</span>
+        <h3>A helper beside the team, not in it</h3>
+        <p>Sometimes you want help with one thing: a store filing, a legal check, a write-up. Reading the same project costs the team nothing. Writing where the team writes, or messaging its sessions, does.</p>
+        <ul>
+          <li>Reads the project freely; keeps its own notes in its own folder.</li>
+          <li>Never writes to the team's files or branches, and never messages the team's sessions.</li>
+          <li>Hands you a proposal file plus one line to paste to the chief of staff, so you stay the only bridge.</li>
+          <li>The chief of staff leaves it alone: no status row, no broadcasts, no restarts.</li>
+        </ul>
+        <div class="slip" aria-label="Example line to paste">
+          <span class="hd">you paste to: chief-of-staff</span>
+          <span>the owner says: “The store text is ready in store-notes/proposals/store-text.md. Send it to the builder for the next release.”</span>
+        </div>
+      </article>
     </div>
   </section>
 
@@ -404,7 +423,7 @@ section{display:flex;flex-direction:column;gap:22px}
       <div class="need">
         <h2 style="font-size:26px">What you need</h2>
         <p>restart-ready works in any Claude Code session.</p>
-        <p>build-review-loop and chief-of-staff need the Claude desktop app (Code tab), where sessions can see and message each other.</p>
+        <p>build-review-loop and chief-of-staff need the Claude desktop app (Code tab), where sessions can see and message each other. side-session works in any session beside such a team.</p>
         <p>owner-desk needs Claude artifacts with a database, in claude.ai or the desktop app.</p>
       </div>
     </div>
@@ -413,7 +432,7 @@ section{display:flex;flex-direction:column;gap:22px}
   <section class="origin" aria-labelledby="origin">
     <div class="sec-head read">
       <h2 id="origin">Where it comes from</h2>
-      <p class="lede">All four came out of a real project: an iPhone app built by a team of Claude sessions, taken from its first decision to a beta with testers in 9 days. The owner wrote no app code and made every decision.</p>
+      <p class="lede">All five came out of a real project: an iPhone app built by a team of Claude sessions, taken from its first decision to a beta with testers in 9 days. The owner wrote no app code and made every decision.</p>
     </div>
     <blockquote class="why" style="margin:0">
       <span class="label">Why I built this</span>
