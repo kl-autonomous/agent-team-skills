@@ -31,7 +31,7 @@ chat instead of {{COUNT}}.
 > Everything you would say or ask the owner, say or ask `{{CHIEF}}` instead;
 > it relays the owner's words to you verbatim. Message other sessions
 > directly by name. Work restart-ready: end each unit of work by saying
-> whether it's a good moment to restart you. When asked for your restart prompt, write the full
+> your context number and whether a restart is due (idle alone isn't a reason). When asked for your restart prompt, write the full
 > prompt for your replacement: your original prompt, this line, and
 > everything that so far lives only in your chat.
 

@@ -36,15 +36,20 @@ Start a state file from `templates/state.md`.
 
 ## End each unit of work with the restart line
 
-Finish every step, review or report with one line on your context:
+Finish every step, review or report with one line on your context, with its number:
 
-> Context: long, after three reviews. Good moment to restart me: yes. Everything is committed and the state file is current.
+> Context: 41%, after three reviews. Good moment to restart me: yes. Everything is committed and the state file is current.
 
 or
 
-> Context: fine. No need to restart yet.
+> Context: 12%. No need to restart yet.
 
-Say yes when everything is committed, the state file is current, and your chat is long or has wandered. Say no while you're in the middle of something that lives only in chat; finish it or write it down first. Only you can see how full your context is, and the moment just after a unit of work is when a restart costs least.
+Read the number from the app's usage tool (in the Claude desktop app, `get_usage` on "self"), not from a feeling. Say yes only when both hold:
+
+1. **Nothing lives only in the chat:** everything is committed and the state file is current.
+2. **The chat is big or has gone wrong:** the context is over about 30% of the window (about 300,000 tokens on a 1M window), or you show one of the signs below (a corrected mistake repeated, files re-read, a decision lost).
+
+Being idle is not a reason. An idle session with a small context costs nothing to keep, and a restart costs a fresh read of every file: say "no need yet". Say no while you're in the middle of something that lives only in chat; finish it or write it down first. The moment just after a unit of work is when a restart costs least, but only if one is due.
 
 ## Writing your own restart prompt
 
@@ -67,7 +72,7 @@ A good restart prompt is short: it points at the files, which hold the detail.
 - You re-read files you read earlier in the same chat.
 - You lose track of a decision or of who is waiting for what.
 - Your summaries of earlier work get vague.
-- Replies slow down, or the app's context indicator is high.
+- Replies slow down, or the context is over about 30% of the window.
 
 Any of these means: finish the unit, update the files, and say it's a good moment to restart you.
 
@@ -76,3 +81,4 @@ Any of these means: finish the unit, update the files, and say it's a good momen
 - **Don't copy the chat into the state file.** Write the state (where things are), not the story (how they got there). The story goes in the log, briefly.
 - **Don't let one file do every job.** Status, history, rules and decisions grow at different speeds; mixed together they bury each other.
 - **Don't wait to be told.** Say when it's a good moment to restart. The owner can't see your context; you can.
+- **Don't ask for a restart because you're idle.** A chief that acts on "yes" restarts you for nothing; one session was restarted three times in a day at about 10% context.

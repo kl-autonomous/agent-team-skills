@@ -17,6 +17,7 @@ It never does the other sessions' work (no code, no reviews, no design). That ke
   - `list_sessions`, `get_session` and `list_events`, to check a session's state and its last lines;
   - `PushNotification`, for the owner's phone or desktop;
   - `set_session_effort`, to raise and lower a worker's effort per task.
+  - `get_usage`, to read how full a session's context is before a restart.
   - Only if the owner allows the chief to restart sessions itself: `start_session`, `stop_session` and `archive_session`.
 - **A folder for the project**, ideally a git repo, where the chief keeps `docs/chief-of-staff.md` and `docs/status.md`.
 
@@ -69,7 +70,7 @@ Each duty exists because of a way the team fails without it.
 
    Keep it to these four sections, and list only what's open. Your standing notes go in `docs/chief-of-staff.md` and your restart prompt in `docs/restart/`, never on the page: it's the page you re-read most, so it must be the shortest. Commit it after a real event (a hand-off, a verdict, an answer), not after every message. Commit only your own files: this page, `docs/chief-of-staff.md` and your restart prompt. Never push, rebase or switch branches; check `git branch --show-current` first. Show the page when the owner says "status", after each finished unit of work, and whenever something needs them.
 
-5. **Context health, effort and restarts.** Every worker works restart-ready (see the restart-ready skill), so it ends each unit of work by saying whether now is a good moment to restart it fresh. A restart is also due when a session's replies show its context is long, when it's stuck or looping, or when it stopped. Record each one on the status page. Follow "The restart protocol" below.
+5. **Context health, effort and restarts.** Every worker works restart-ready (see the restart-ready skill), so it ends each unit of work with its context number and whether a restart is due. That sentence is a hint, not a trigger. Before any restart, read the number yourself (`get_usage` on that session; an idle session may report it unavailable, so then take the number from its last restart line). Restart only when it's over about 30% of the window (about 300,000 tokens on a 1M window), or when the session is stuck, looping, repeating corrected mistakes or stopped. Idle alone is never a reason. Record each one on the status page. Follow "The restart protocol" below.
 
    **Effort.** Match a session's effort to the risk of the step, not to the importance of the project: high by default; extra high only for steps that touch records, sync, import, export or money. Raise it for a task that needs it and lower it afterwards (`set_session_effort`), instead of starting another session for the harder kind of work. In the desktop app you can change another session's effort or model without the owner clicking a button only for a session you started, only up to your own effort, and only to the same model or a cheaper one. So run the chief at least as high as the highest effort you'll set; a chief at medium makes the owner approve every raise.
 
@@ -132,5 +133,6 @@ If the owner chose a desk in setup, use the owner-desk skill for it:
 - **Sending again too soon.** A session reads messages at its next turn. Check its state before resending, or it gets the task twice.
 - **A stale status page.** Update it after every real event, not at the end of the day.
 - **Broadcasting a rule.** A rule that only matters at the next restart goes into the shared notes file (the project's CLAUDE.md, or `docs/chief-of-staff.md` for your own), where every session reads it at restart. Tell a live session only what changes what it's doing now. One wording change sent to six sessions cost about fifteen turns: each reply woke the chief again.
+- **Restarting the idle.** A session says "good moment to restart" because it has nothing to do, and the chief restarts it. Each restart re-reads every file for nothing: one session was restarted three times in a day at about 10% context. Read the number first; idle with a small context means leave it.
 - **Poking idle sessions.** Checking every session after every report costs a turn in each, plus yours. Wait for the idle notice or the files.
 - **Two sessions with one name.** Messages go to the wrong one. Archive and rename old sessions at every restart.

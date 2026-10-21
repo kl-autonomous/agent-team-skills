@@ -29,4 +29,4 @@ For STOP: what needs the owner.}}
 Things that don't block: style, naming, ideas for later. Leave this
 section out if there's nothing to say.
 
-Context: {{good moment to restart me / no need yet}}.
+Context: {{percent}}%. {{Good moment to restart me / No need yet}}.
