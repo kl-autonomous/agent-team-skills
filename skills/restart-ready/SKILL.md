@@ -51,6 +51,20 @@ Read the number from the app's usage tool (in the Claude desktop app, `get_usage
 
 Being idle is not a reason. An idle session with a small context costs nothing to keep, and a restart costs a fresh read of every file: say "no need yet". Say no while you're in the middle of something that lives only in chat; finish it or write it down first. The moment just after a unit of work is when a restart costs least, but only if one is due.
 
+**When the number is over the line, don't stop at saying so: hand over.** Update the state file, write your replacement's prompt (below), commit, and tell the chief of staff once: "over 30%, ready to be restarted, prompt in the file". Every question that comes back to you costs a turn at your full size; a chief that has to ask you to write the prompt pays two or three of them. The trigger is the measured number at the end of a unit, never the end of a unit alone: a prompt written "just in case" wastes the turns it was meant to save.
+
+### Why the line is where it is
+
+Every turn sends the whole chat back to the model, so a long chat is paid for on every turn, not once. Measured on one team over four days (2026-10-23): about 2.3 billion tokens re-read from the cache against 5 million written as answers. At the usual rate (a cache read costs about a tenth of a fresh token) the re-reading was worth about 45 times the writing. A restart costs once: 20–60k fresh tokens to read the files, one or two turns to write the hand-over, one turn for whoever presses the button. It saves, on every turn after, about a tenth of the difference between the old size and the new:
+
+| Restart at | Saving per turn (fresh session about 110k) | Repaid after |
+|---|---|---|
+| 150k | about 4k | about 30 turns |
+| 300k (the 30% line on a 1M window) | about 19k | about 7 turns |
+| 500k | about 39k | about 4 turns |
+
+Below about 150k a restart loses; past 300k, waiting is the expensive choice, and the hand-over itself gets dearer with every turn you wait. The fixed part of the context (tool descriptions, system prompt, memory: 60–90k) is paid by every session on every turn, restarted or not; it is not the price of restarting.
+
 ## Writing your own restart prompt
 
 When you're asked for it, or after you said yes and the owner agrees:
@@ -62,9 +76,20 @@ When you're asked for it, or after you said yes and the owner agrees:
    - a short "Since the last restart" section with only what isn't in the files yet: what you're in the middle of, what you promised, who is waiting for what, and which shared things (devices, folders, accounts) are yours to use.
 3. **Check `git status`.** Nothing important should be uncommitted. If something is, say what and why.
 4. **Save it to a file too**, such as `docs/restart/<role>.md`, and commit it, so it survives even if the chat that delivers it doesn't.
-5. **Hand it over** in a collapsible `<details>` block, with your exact session name and model. Remind the owner to archive the old session and rename it (`builder_old2`), so two sessions never share a name. If you watch an artifact (such as an owner desk), put its link in the prompt; the new session must start watching it again.
+5. **Hand it over** in a collapsible `<details>` block, with your exact session name and model, or leave the start card for your replacement yourself where the owner allows it. If you watch an artifact (such as an owner desk), put its link in the prompt; the new session must start watching it again.
+6. **Never carry an owner's authorisation in the prompt** (a standing OK to merge, a permission to install). Those end with the session and come from the owner again. The prompt may say that one existed, never that it still holds.
 
 A good restart prompt is short: it points at the files, which hold the detail.
+
+## The new session's first turn
+
+In this order, each step one call, before any work:
+
+1. Rename the predecessor by its id (`builder_old2`), so the name is yours alone. Sessions find each other by name, so this is also what keeps messages flowing: a chief addressed by name is reached by its replacement with nobody re-pointed.
+2. Check the predecessor isn't still running. If it is, wait, and don't touch the shared folder: two sessions of one role in one working copy commit over each other.
+3. Read its last events for anything it didn't act on: a message relayed to it seconds before the hand-over is otherwise read by nobody.
+4. Archive it, by that id, never by title (archiving is reversible; the transcript stays).
+5. Then read CLAUDE.md and the state file, and work.
 
 ## Signs a restart is due
 
@@ -81,4 +106,5 @@ Any of these means: finish the unit, update the files, and say it's a good momen
 - **Don't copy the chat into the state file.** Write the state (where things are), not the story (how they got there). The story goes in the log, briefly.
 - **Don't let one file do every job.** Status, history, rules and decisions grow at different speeds; mixed together they bury each other.
 - **Don't wait to be told.** Say when it's a good moment to restart. The owner can't see your context; you can.
+- **Don't rely on noticing.** "When your context is over 30%" is never noticed by a session that answers one event after another; one chief reached 53% with its own 30% rule read and unapplied. Put the check where a habit already is: `get_usage` on "self" right before every report, and the number in the restart line. A rule without a scheduled moment is a hope.
 - **Don't ask for a restart because you're idle.** A chief that acts on "yes" restarts you for nothing; one session was restarted three times in a day at about 10% context.

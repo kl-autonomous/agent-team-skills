@@ -19,7 +19,12 @@ Since the last restart ({{DATE}}):
 - Yours to use: {{devices, folders, accounts; and what to leave alone}}
 - Watch: {{artifact links to start watching again, if any}}
 
-Start by reading CLAUDE.md and {{STATE FILE}}.
+First turn, in this order: rename the old session {{OLD SESSION ID}} to
+"{{SESSION}}_old"; check it isn't running (if it is, wait, and don't touch
+the shared folder); read its last events for anything it didn't act on;
+archive it by that id. Then read CLAUDE.md and {{STATE FILE}}.
+
+No authorisation of the owner's carries over from the old session.
 ```
 
 </details>
@@ -31,5 +36,7 @@ Before handing it over:
 - the state file is current;
 - lasting lessons are in `CLAUDE.md`, not only in this prompt.
 
-After the owner starts the new session: archive the old one and rename it
-(`{{SESSION}}_old1`), so two sessions never share a name.
+The new session renames and archives the old one itself, as its first
+turn says, so two sessions never share a name and nobody has to be
+re-pointed. Write the prompt only when your measured context is over the
+line, never "just in case".

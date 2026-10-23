@@ -105,6 +105,12 @@ nine days, with the owner making every decision and writing no app code.
 - The reviewer sent work back 7 times, with 12 blocking problems, before
   anything merged.
 - Sessions were restarted 12 times, with nothing lost.
+- Measured on 23 Oct 2026, over four days of the team's transcripts:
+  about 2.3 billion tokens re-read from the cache against 5 million
+  written as answers, and a median context per turn of 320–490k against
+  a 30% rule. That measurement is why restart-ready now says a session
+  hands over by itself when its number is over the line, and why the
+  chief checks its own number at a fixed moment.
 - The board the owner asked for closed 18 of its first 30 items on its
   first day.
 
