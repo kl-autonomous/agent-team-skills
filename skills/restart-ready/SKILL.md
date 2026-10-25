@@ -55,7 +55,7 @@ Being idle is not a reason. An idle session with a small context costs nothing t
 
 ### Why the line is where it is
 
-Every turn sends the whole chat back to the model, so a long chat is paid for on every turn, not once. Measured on one team over four days (2026-10-23): about 2.3 billion tokens re-read from the cache against 5 million written as answers. At the usual rate (a cache read costs about a tenth of a fresh token) the re-reading was worth about 45 times the writing. A restart costs once: 20–60k fresh tokens to read the files, one or two turns to write the hand-over, one turn for whoever presses the button. It saves, on every turn after, about a tenth of the difference between the old size and the new:
+Every turn sends the whole chat back to the model, so a long chat is paid for on every turn, not once. Measured on one team over four days (2026-10-23): about 1.5 billion tokens re-read from the cache against 3.2 million (counted once per model response; a response is logged as several lines) written as answers. At the usual rate (a cache read costs about a tenth of a fresh token) the re-reading was worth about 45 times the writing. A restart costs once: 20–60k fresh tokens to read the files, one or two turns to write the hand-over, one turn for whoever presses the button. It saves, on every turn after, about a tenth of the difference between the old size and the new:
 
 | Restart at | Saving per turn (fresh session about 110k) | Repaid after |
 |---|---|---|
